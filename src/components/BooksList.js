@@ -15,9 +15,10 @@ export function BooksList() {
                 title: bookTitle,
                 summary: bookSummary,
                 publishedOn: bookPublishedOn,
-                aurthor: bookAurthor
+                author: bookAurthor
             }
-            setBooks(books => [...books, newBook]);
+            //Add the newbook in front of the array
+            setBooks(books => [newBook, ...books]);
 
             //clean the form
             setBookTitle("");
@@ -57,8 +58,8 @@ export function BooksList() {
                 <span>Published Date: </span>
                 <input type="date" name="publiedOn" value={bookPublishedOn} onChange={(event) => setPublishedOn(event.target.value)} style={{ marginTop: '10px' }} required />
                 <br />
-                <span>Book Aurthor: </span>
-                <input type="text" name="aurthor" value={bookAurthor} onChange={(event) => setBookAurthor(event.target.value)} style={{ marginTop: '10px' }} required />
+                <span>Book Author: </span>
+                <input type="text" name="author" value={bookAurthor} onChange={(event) => setBookAurthor(event.target.value)} style={{ marginTop: '10px' }} required />
                 <br />
                 <button style={{ marginTop: '20px' }}>Add Book</button>
             </form >
@@ -66,7 +67,7 @@ export function BooksList() {
             <h2>Books List:</h2>
             <ol>
                 {books.map(book => (
-                    <li>Book Title: {book.title}<br />Book Summary: {book.summary}<br />Published On: {book.publishedOn}<br />Aurthor: {book.aurthor}<br /><br /></li>
+                    <li>Book Title: {book.title}<br />Book Summary: {book.summary}<br />Published On: {book.publishedOn}<br />Author: {book.author}<br /><br /></li>
                 ))}
             </ol>
         </>
