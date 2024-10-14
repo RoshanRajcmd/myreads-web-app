@@ -9,14 +9,11 @@ export function BooksList() {
         event.preventDefault();
         if (validateGivenBookDetails()) {
 
-            setBooks([...books, bookData]);
+            setBooks([bookData, ...books]);
 
             //clean the form
             setErrorMsg("");
-            // bookData.title = '';
-            // bookData.summary = '';
-            // bookData.publishedOn = '';
-            // bookData.author = '';
+            setBookData({ title: '', summary: '', publishedOn: '', author: '' });
         }
     }
 
