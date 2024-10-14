@@ -2,45 +2,42 @@ import React, { useState } from 'react';
 
 export function BooksList() {
     const [books, setBooks] = useState([]);
-    const [bookTitle, setBookTitle] = useState("");
-    const [bookSummary, setBookSummary] = useState("");
-    const [bookPublishedOn, setPublishedOn] = useState("");
-    const [bookAurthor, setBookAurthor] = useState("");
+    const [bookData, setBookData] = useState({ title: '', summary: '', publishedOn: '', author: '' });
     const [errorMsg, setErrorMsg] = useState("");
 
     const handleAddTask = (event) => {
         event.preventDefault();
         if (validateGivenBookDetails()) {
-            const newBook = {
-                title: bookTitle,
-                summary: bookSummary,
-                publishedOn: bookPublishedOn,
-                author: bookAurthor
-            }
-            //Add the newbook in front of the array
-            setBooks(books => [newBook, ...books]);
+
+            setBooks([...books, bookData]);
 
             //clean the form
-            setBookTitle("");
-            setBookSummary("");
-            setPublishedOn("");
-            setBookAurthor("");
             setErrorMsg("");
+            // bookData.title = '';
+            // bookData.summary = '';
+            // bookData.publishedOn = '';
+            // bookData.author = '';
         }
     }
 
     function validateGivenBookDetails() {
-        console.log(bookPublishedOn);
         let validation = false;
-        let publishDate = new Date(bookPublishedOn);
+        let publishDate = new Date(bookData.publishedOn);
         let currentDate = new Date();
         if (publishDate <= currentDate) {
             validation = true;
         }
         else {
-            setErrorMsg("Please set a valid Date")
+            setErrorMsg("Please set a valid Date");
         }
         return validation;
+    }
+
+    const handleBookDataInput = (event) => {
+        //event.target.name: This extracts the name attribute of the input element
+        //event.target.value: This extracts the current value of the input element. So the below line will look like
+        //setBookData({ ...bookData, title: event.target.value })
+        setBookData({ ...bookData, [event.target.name]: event.target.value });
     }
 
     return (
@@ -50,16 +47,16 @@ export function BooksList() {
             <span visible={errorMsg !== ""} style={{ color: 'red' }}>{errorMsg}</span>
             <form onSubmit={handleAddTask}>
                 < span > Book Title: </span >
-                <input type="text" name="title" value={bookTitle} onChange={(event) => setBookTitle(event.target.value)} style={{ marginTop: '10px' }} required />
+                <input type="text" name="title" value={bookData.title} onChange={handleBookDataInput} style={{ marginTop: '10px' }} required />
                 <br />
                 <span>Book Summary: </span>
-                <input type="text" name="summary" value={bookSummary} onChange={(event) => setBookSummary(event.target.value)} style={{ marginTop: '10px' }} />
+                <input type="text" name="summary" value={bookData.summary} onChange={handleBookDataInput} style={{ marginTop: '10px' }} />
                 <br />
                 <span>Published Date: </span>
-                <input type="date" name="publiedOn" value={bookPublishedOn} onChange={(event) => setPublishedOn(event.target.value)} style={{ marginTop: '10px' }} required />
+                <input type="date" name="publishedOn" value={bookData.publishedOn} onChange={handleBookDataInput} style={{ marginTop: '10px' }} required />
                 <br />
                 <span>Book Author: </span>
-                <input type="text" name="author" value={bookAurthor} onChange={(event) => setBookAurthor(event.target.value)} style={{ marginTop: '10px' }} required />
+                <input type="text" name="author" value={bookData.author} onChange={handleBookDataInput} style={{ marginTop: '10px' }} required />
                 <br />
                 <button style={{ marginTop: '20px' }}>Add Book</button>
             </form >
