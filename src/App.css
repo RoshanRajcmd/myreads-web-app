@@ -32,7 +32,32 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.alertMessage {
+  min-width: 200px;
+  justify-content: space-between;
+}
+
+.loginText {
+  color: #007bff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.successMessage {
+  color: green;
+  font-weight: bold;
+}
+
+.login-card {
+  min-height: 60vh;
+}
+
+.registerMessage {
+  margin-top: 10vh;
 }

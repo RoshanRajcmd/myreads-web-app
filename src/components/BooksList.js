@@ -8,9 +8,7 @@ export function BooksList() {
     const handleAddTask = (event) => {
         event.preventDefault();
         if (validateGivenBookDetails()) {
-
             setBooks([bookData, ...books]);
-
             //clean the form
             setErrorMsg("");
             setBookData({ title: '', summary: '', publishedOn: '', author: '' });

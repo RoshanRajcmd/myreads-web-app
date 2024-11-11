@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 
 export function Register() {
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     const handlePasswordVisibility = () => {
         setPassword({ ...password, showPassword: !password.showPassword })
@@ -43,7 +43,7 @@ export function Register() {
     const handleRegister = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
             alert("Registeration Successful -> Redirecting...")
-            navigate("/BooksList");
+            redirect("/MyReads/Login");
         } else {
             alert("Please enter a valid Email Id and Password")
         }
@@ -51,7 +51,7 @@ export function Register() {
 
     return (
         <>
-            <h2 style={{ color: 'white', marginTop: '30px', marginBottom: '30px' }}>or<br />Register</h2>
+            <h1>Sign Up for MyReads </h1>
             <span style={{ marginRight: '20px' }}>Email Id</span>
             <input type="text" id='emailInput' onChange={(e) => handleEmail(e.target.value)} style={{ marginRight: '20px' }}></input>
             <span visible={emailValidationMsg !== '' ? true : false} style={{ color: 'red' }}>{emailValidationMsg}</span>

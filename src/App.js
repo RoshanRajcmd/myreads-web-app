@@ -1,6 +1,13 @@
 import './App.css';
 import { useEffect } from 'react';
-import { LoginPage } from './components/LoginPage'
+import { Login } from './components/Login';
+import { Register } from './components/Register';
+import { BooksList } from './components/BooksList';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from 'react-router-dom';
 
 function App() {
   //Comment the below useEffect line if you are working only on the front end
@@ -9,11 +16,29 @@ function App() {
     fetch('http://localhost:8080/api/v1/user/getUsers')
       .then(response => response.json())
       .then(result => console.log(result));
-  })
+  });
 
   return (
     <div className="App">
-      <LoginPage />
+      <Router>
+        <Routes>
+          <Route
+            exact
+            path="/MyReads/Login"
+            element={<><Login /> </>}
+          />
+          <Route
+            exact
+            path="/MyReads/Register"
+            element={<><Register /> </>}
+          />
+          <Route
+            exact
+            path="/MyReads"
+            element={<BooksList />}
+          />
+        </Routes>
+      </Router>
     </div>
   );
 }
