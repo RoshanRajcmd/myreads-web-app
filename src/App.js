@@ -1,4 +1,5 @@
 import './App.css';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
@@ -20,25 +21,28 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route
-            exact
-            path="/MyReads/Login"
-            element={<><Login /> </>}
-          />
-          <Route
-            exact
-            path="/MyReads/Register"
-            element={<><Register /> </>}
-          />
-          <Route
-            exact
-            path="/MyReads/Home"
-            element={<BooksList />}
-          />
-        </Routes>
-      </Router>
+      <div class="flex items-center justify-center
+              min-h-screen bg-gray-200">
+        <Router>
+          <Routes>
+            <Route
+              exact
+              path="/MyReads/Login"
+              element={<><Login /> </>}
+            />
+            <Route
+              exact
+              path="/MyReads/Register"
+              element={<><Register /> </>}
+            />
+            <Route
+              exact
+              path="/MyReads/Home"
+              element={<BooksList />}
+            />
+          </Routes>
+        </Router>
+      </div>
     </div>
   );
 }
