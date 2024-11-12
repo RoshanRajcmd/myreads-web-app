@@ -34,7 +34,7 @@ function App() {
           />
           <Route
             exact
-            path="/MyReads"
+            path="/MyReads/Home"
             element={<BooksList />}
           />
         </Routes>

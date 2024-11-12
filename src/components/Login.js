@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function Login() {
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handlePasswordVisibility = () => {
         setPassword({ ...password, showPassword: !password.showPassword })
@@ -41,13 +41,17 @@ export function Login() {
         }
     }
 
-    const handleLogin = () => {
+    const redirectToHome = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            alert("Successful Login -> Redirecting...")
-            redirect("/MyReads");
+            alert("Successful Login -> Redirecting...");
+            navigate("/MyReads/Home");
         } else {
-            alert("Please enter a valid Email Id and Password")
+            alert("Please enter a valid Email Id and Password");
         }
+    }
+
+    const redirectToRegister = () => {
+        navigate("/MyReads/Register");
     }
 
     return (
@@ -61,10 +65,10 @@ export function Login() {
             <input type={password.showPassword ? 'text' : 'password'} onChange={(e) => handlePassword(e.target.value)} style={{ marginRight: '20px' }}></input>
             <button onClick={handlePasswordVisibility}>View Password</button>
             <br />
-            <button onClick={handleLogin} style={{ marginTop: '10px' }}>Sign In</button>
+            <button onClick={redirectToHome} style={{ marginTop: '10px' }}>Sign In</button>
             <br />
             <p>or Register using...</p>
-            <button onClick={() => redirect("/MyReads/Register")} style={{ marginTop: '10px' }}>Sign Up</button>
+            <button onClick={redirectToRegister} style={{ marginTop: '10px' }}>Sign Up</button>
         </>
     )
 }

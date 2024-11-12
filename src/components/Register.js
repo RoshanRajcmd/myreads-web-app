@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function Register() {
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handlePasswordVisibility = () => {
         setPassword({ ...password, showPassword: !password.showPassword })
@@ -43,7 +43,7 @@ export function Register() {
     const handleRegister = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
             alert("Registeration Successful -> Redirecting...")
-            redirect("/MyReads/Login");
+            navigate("/MyReads/Login");
         } else {
             alert("Please enter a valid Email Id and Password")
         }
