@@ -21,28 +21,25 @@ function App() {
 
   return (
     <div className="App">
-      <div class="flex items-center justify-center
-              min-h-screen bg-gray-200">
-        <Router>
-          <Routes>
-            <Route
-              exact
-              path="/MyReads/Login"
-              element={<><Login /> </>}
-            />
-            <Route
-              exact
-              path="/MyReads/Register"
-              element={<><Register /> </>}
-            />
-            <Route
-              exact
-              path="/MyReads/Home"
-              element={<BooksList />}
-            />
-          </Routes>
-        </Router>
-      </div>
+      <Router>
+        <Routes>
+          <Route
+            exact
+            path="/MyReads/Login"
+            element={<><Login /> </>}
+          />
+          <Route
+            exact
+            path="/MyReads/Register"
+            element={<><Register /> </>}
+          />
+          <Route
+            exact
+            path="/MyReads/Home"
+            element={<BooksList />}
+          />
+        </Routes>
+      </Router>
     </div>
   );
 }
