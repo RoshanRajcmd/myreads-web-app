@@ -17,6 +17,7 @@ export function Register() {
     }
 
     const handlePassword = (enteredPassword) => {
+        //Need Validation of password and change the input box border color when the password is not valid
         setPassword({ ...password, value: enteredPassword })
     }
 
