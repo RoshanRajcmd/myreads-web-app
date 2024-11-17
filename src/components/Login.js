@@ -76,10 +76,10 @@ export function Login() {
                     />
                     <span class="block mb-3 text-red-500" visible={emailValidationMsg !== '' ? true : false}>{emailValidationMsg}</span>
 
-                    <label for="passwordInput" class="block mb-2 text-left text-gray-700 font-bold">Password:</label>
+                    <label for="passwordInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Password:</label>
                     <div>
                         <input type={password.showPassword ? 'text' : 'password'}
-                            class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
+                            class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
                             id="passwordInput"
                             placeholder="Enter your Password"
                             onChange={(e) => handlePassword(e.target.value)}

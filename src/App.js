@@ -1,6 +1,5 @@
 import './App.css';
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
 import { BooksList } from './components/BooksList';
@@ -11,13 +10,6 @@ import {
 } from 'react-router-dom';
 
 function App() {
-  //Comment the below useEffect line if you are working only on the front end
-  //The below line will access the spring boot application running on the given port
-  useEffect(() => {
-    fetch('http://localhost:8080/api/v1/user/getUsers')
-      .then(response => response.json())
-      .then(result => console.log(result));
-  });
 
   return (
     <div className="App">

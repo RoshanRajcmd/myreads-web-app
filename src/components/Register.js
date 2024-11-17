@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 
 export function Register() {
+    const [username, setUsername] = useState('');
+    const [dob, setDob] = useState('');
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
@@ -40,9 +44,16 @@ export function Register() {
         }
     }
 
-    const redirectToLogin = () => {
+    const validateAndRedirectToLogin = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
             alert("Registeration Successful -> Redirecting...")
+            // //Comment the below useEffect line if you are working only on the front end
+            // //The below line will access the spring boot application running on the given port
+            // useEffect(() => {
+            //     fetch('http://localhost:8080/api/v1/user/getUsers')
+            //         .then(response => response.json())
+            //         .then(result => console.log(result));
+            // });
             navigate("/MyReads/Login");
         } else {
             alert("Please enter a valid Email Id and Password")
@@ -64,7 +75,22 @@ export function Register() {
                     Sign Up for MyReads
                 </h3>
                 <form>
-                    <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
+                    <label for="userNameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
+                    <input type="text"
+                        class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                        id="userNameInput"
+                        placeholder='Enter your Name'
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                    <label for="dobInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Date of Birth:</label>
+                    <input type="date"
+                        class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                        id="dobInput"
+                        onChange={(e) => setDob(e.target.value)}
+                        required
+                    />
+                    <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Email:</label>
                     <input type="text"
                         class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                         id="emailInput"
@@ -81,10 +107,10 @@ export function Register() {
                         <li>3. Must have atleast one number</li>
                     </ul>
 
-                    <label for="passwordInput" class="block mb-2 text-left text-gray-700 font-bold">Password:</label>
+                    <label for="passwordInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Password:</label>
                     <div>
                         <input type={password.showPassword ? 'text' : 'password'}
-                            class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
+                            class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
                             id="passwordInput"
                             placeholder="Enter your Password"
                             onChange={(e) => handlePassword(e.target.value)}
@@ -100,7 +126,7 @@ export function Register() {
                     <label for="confirmPasswordInput" class="block mb-2 text-left text-gray-700 font-bold">Confirm Password:</label>
                     <div>
                         <input type={password.showPassword ? 'text' : 'password'}
-                            class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
+                            class="w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
                             id="confirmPasswordInput"
                             placeholder="Re-enter Password"
                             onChange={(e) => handleConfirmPassword(e.target.value)}
@@ -113,7 +139,7 @@ export function Register() {
                         <button
                             type="submit"
                             class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
-                            onClick={redirectToLogin}
+                            onClick={validateAndRedirectToLogin}
                         >Register</button>
                     </div>
                 </form>
