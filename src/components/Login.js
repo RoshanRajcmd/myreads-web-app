@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { validateUserCred } from '../api/UserService';
 
 export function Login() {
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
-    const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
     const navigate = useNavigate();
+
+    var isValidUser = false;
 
     const handlePasswordVisibility = () => {
         setPassword({ ...password, showPassword: !password.showPassword })
@@ -29,24 +31,20 @@ export function Login() {
             setEmail(enteredEmail.trim())
             setEmailValidationMsg('')
         }
-        console.log(email)
     }
 
-    const handleConfirmPassword = (comfirmationPassword) => {
-        if (handleConfirmPassword !== password) {
-            setConfirmPasswordMsg("Missmatch in Password")
-        }
-        else {
-            setConfirmPasswordMsg('')
-        }
-    }
+    const validateUserDetailsInDB = async () => {
+        isValidUser = await validateUserCred(email, password.value);
+    };
 
     const redirectToHome = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            alert("Successful Login -> Redirecting...");
-            navigate("/MyReads/Home");
+            if (isValidUser) {
+                alert("Successful Login -> Redirecting...");
+                navigate("/MyReads/Home");
+            }
         } else {
-            alert("Please enter a valid Email Id and Password");
+            alert("Incorrect Email Id or Password");
         }
     }
 
