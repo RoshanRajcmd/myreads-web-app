@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateUserCred } from '../api/UserService';
 
@@ -7,8 +7,7 @@ export function Login() {
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const navigate = useNavigate();
-
-    var isValidUser = false;
+    const [isValidUser, setValidUser] = useState(false);
 
     const handlePasswordVisibility = () => {
         setPassword({ ...password, showPassword: !password.showPassword })
@@ -25,26 +24,35 @@ export function Login() {
 
     const handleEmail = (enteredEmail) => {
         if (!validateEmail(enteredEmail)) {
-            setEmailValidationMsg("Please enter a valid email Id")
+            setEmailValidationMsg("Please Enter vaild Email Id");
         }
         else {
-            setEmail(enteredEmail.trim())
-            setEmailValidationMsg('')
+            setEmail(enteredEmail.trim());
+            setEmailValidationMsg("");
         }
     }
 
     const validateUserDetailsInDB = async () => {
-        isValidUser = await validateUserCred(email, password.value);
+        if (emailValidationMsg === "" && email !== "" && password.value !== "") {
+            const response = await validateUserCred(email, password.value);
+            setValidUser(response?.data);
+        }
     };
+
+    useEffect(() => {
+        validateUserDetailsInDB();
+    });
 
     const redirectToHome = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
             if (isValidUser) {
                 alert("Successful Login -> Redirecting...");
+                setValidUser(false);
                 navigate("/MyReads/Home");
             }
+            else setEmailValidationMsg("Incorrect Email Id or Password");
         } else {
-            alert("Incorrect Email Id or Password");
+            setEmailValidationMsg("Please enter vaild Email Id or Password");
         }
     }
 
@@ -57,7 +65,7 @@ export function Login() {
               min-h-screen bg-gray-200">
             <div class="main bg-white rounded-lg shadow-md p-10 
     transition-transform w-96 text-center">
-                <h1 class="text-yellow-500 text-3xl">
+                <h1 class="text-yellow-400 text-3xl">
                     MyReads
                 </h1>
                 <h3 class="text-lg">
@@ -72,7 +80,7 @@ export function Login() {
                         onChange={(e) => handleEmail(e.target.value)}
                         required
                     />
-                    <span class="block mb-3 text-red-500" visible={emailValidationMsg !== '' ? true : false}>{emailValidationMsg}</span>
+                    <span class="block mb-3 text-red-500" visible={emailValidationMsg !== '' ? true : false} aria-live='assertive'>{emailValidationMsg}</span>
 
                     <label for="passwordInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Password:</label>
                     <div>
@@ -86,7 +94,7 @@ export function Login() {
                         <button type="button" class="focus:outline-none -ml-8" onClick={handlePasswordVisibility}>
                             <img src=
                                 "https://media.geeksforgeeks.org/wp-content/uploads/20240227164304/visible.png"
-                                alt="" class="w-4"></img>
+                                alt="View / Hide password" class="w-4"></img>
                         </button>
                     </div>
 
