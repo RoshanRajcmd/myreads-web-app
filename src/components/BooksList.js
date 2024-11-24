@@ -1,104 +1,65 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BookCard } from './BookCard';
+import { Header } from './Hearder';
 
 export function BooksList() {
-    const [books, setBooks] = useState([]);
-    const [bookData, setBookData] = useState({ title: '', summary: '', publishedOn: '', author: '' });
-    const [errorMsg, setErrorMsg] = useState("");
-    const navigate = useNavigate();
+    const [books, setBooks] = useState();
+    const [currentPage, setCurrentPage] = useState();
 
-    const handleAddBook = (event) => {
-        event.preventDefault();
-        if (validateGivenBookDetails()) {
-            setBooks([bookData, ...books]);
-            //clean the form
-            setErrorMsg("");
-            setBookData({ title: '', summary: '', publishedOn: '', author: '' });
+    //An async function that getALL the books of the given page no each
+    //by given size. By defaul the page and size value is 0, 10
+    const getAllBooks = async (page = 0, size = 10) => {
+        try {
+            setCurrentPage(page);
+            //TODO - Implement the below line when doing CRUD functions of Books
+            //const {books} =await getAllBooks(page, size);
+            setBooks(books);
+            console.log(books);
+        }
+        catch (error) {
+            console.log(error);
         }
     }
 
-    function validateGivenBookDetails() {
-        let validation = false;
-        let publishDate = new Date(bookData.publishedOn);
-        let currentDate = new Date();
-        if (publishDate <= currentDate) {
-            validation = true;
-        }
-        else {
-            setErrorMsg("Please set a valid Date");
-        }
-        return validation;
-    }
-
-    const handleBookDataInput = (event) => {
-        //event.target.name: This extracts the name attribute of the input element
-        //event.target.value: This extracts the current value of the input element. So the below line will look like
-        //setBookData({ ...bookData, title: event.target.value })
-        setBookData({ ...bookData, [event.target.name]: event.target.value });
-    }
-
-    const redirectToLogin = () => {
-        navigate("/MyReads/Login");
-    }
+    useEffect(() => {
+        getAllBooks();
+    }, [])
 
     return (
-        <div class="min-h-screen bg-gray-200">
-            <div class="bg-white rounded-lg shadow-md p-10 
-        transition-transform w-96 h-lvh text-center">
-                <h1 class="text-yellow-500 text-3xl">
-                    Add a Book
-                </h1>
-                <h3 class="text-lg">
-                    Interested in a new Read?
-                </h3>
-                <h2>Add a book in your Library</h2>
-                <span visible={errorMsg !== ""} style={{ color: 'red' }}>{errorMsg}</span>
-                <form onSubmit={handleAddBook}>
-                    < lable class="block mb-2 text-left text-gray-700 font-bold"> Book Title: </lable >
-                    <input
-                        type="text"
-                        name="title"
-                        value={bookData.title}
-                        onChange={handleBookDataInput}
-                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
-                        required />
-                    <lable class="block mb-2 text-left text-gray-700 font-bold">Book Summary: </lable>
-                    <input
-                        type="text"
-                        name="summary"
-                        value={bookData.summary}
-                        onChange={handleBookDataInput}
-                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2" />
-                    <lable class="block mb-2 text-left text-gray-700 font-bold">Published Date: </lable>
-                    <input
-                        type="date"
-                        name="publishedOn"
-                        value={bookData.publishedOn}
-                        onChange={handleBookDataInput}
-                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
-                        required />
-                    <lable class="block mb-2 text-left text-gray-700 font-bold">Book Author: </lable>
-                    <input
-                        type="text"
-                        name="author"
-                        value={bookData.author}
-                        onChange={handleBookDataInput}
-                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
-                        required />
-                    <button class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400">Add Book</button>
-                </form >
-                <button
-                    onClick={redirectToLogin}
-                    class="text-blue-500 hover:underline pt-6">Log Out</button>
-            </div>
-            <div >
-                <h2>Books List:</h2>
-                <ol>
-                    {books.map(book => (
-                        <li>Book Title: {book.title}<br />Book Summary: {book.summary}<br />Published On: {book.publishedOn}<br />Author: {book.author}<br /><br /></li>
-                    ))}
+        <>
+            <div><Header /></div>
+            <div class="mt-5 ml-0 mr-0" >
+                {/* The Below line will check the content of books of lenght is 0 means this no data and then it will return the <div> block when its true*/}
+                {books?.content?.lenght === 0 && <div>No Books Added</div>}
+
+                {/* Listing all the BookCards */}
+                <ol class="grid grid-rows-2 gap-4">
+                    {/* The Below line will return each books in the content as <Book> block when its true*/}
+                    {books?.content?.lenght > 0 && books.content.map(book => <BookCard book={book} key={book.id} />)}
                 </ol>
+
+                {/* Page Navigation over the books list show */}
+                {books?.content?.lenght > 0 && books?.totalPages > 1 &&
+                    <div>
+                        <a onClick={() => getAllBooks(currentPage - 1)}
+                            class={0 === currentPage ? "pointer-events-none opacity-60" : ''}>
+                            &laquo;
+                        </a>
+
+                        {books && [...Array(books.totalPages).keys()].map((page, index) =>
+                            <a onClick={getAllBooks(page)}
+                                class={page === currentPage ? "bg-yellow-500 text-white border border-yellow-700 border-solid" : ''}
+                                key={page}>{page + 1}
+                            </a>
+                        )}
+
+                        <a onClick={() => getAllBooks(currentPage + 1)}
+                            class={books?.totalPages === currentPage + 1 ? "pointer-events-none opacity-60" : ''}>
+                            &raquo;
+                        </a>
+                    </div>
+                }
             </div>
-        </div>
+        </>
     )
 }
