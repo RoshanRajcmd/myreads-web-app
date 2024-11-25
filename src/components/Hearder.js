@@ -4,7 +4,7 @@ import { toastSuccess } from '../api/ToastService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
-export function Header({ toggleModal, noOfBooks }) {
+export function Header({ toggleAddBookModal, noOfBooks }) {
     const navigate = useNavigate();
 
     const redirectToLogin = () => {
@@ -18,7 +18,7 @@ export function Header({ toggleModal, noOfBooks }) {
                 <FontAwesomeIcon icon="fa-solid fa-book" />
                 <h3>Books List {noOfBooks}</h3>
 
-                <button onClick={() => toggleModal(true)} class="flex items-center text-white bg-yellow-500 text-xs font-medium p-3 whitespace-normal rounded-3xl shadow-sm transition-shadow">
+                <button onClick={() => toggleAddBookModal(true)} class="flex items-center text-white bg-yellow-500 text-xs font-medium p-3 whitespace-normal rounded-3xl shadow-sm transition-shadow">
                     <i class="fa fa-plus fa-lg mr-2" alt="Add New Book"></i>Add New Book
                 </button>
 
