@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateUserCred } from '../api/UserService';
+import { toastSuccess, toastError } from '../api/ToastService';
 
 export function Login() {
     const [email, setEmail] = useState('');
@@ -33,9 +34,19 @@ export function Login() {
     }
 
     const validateUserDetailsInDB = async () => {
-        if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            const response = await validateUserCred(email, password.value);
-            setValidUser(response?.data);
+        try {
+            if (emailValidationMsg === "" && email !== "" && password.value !== "") {
+                const response = await validateUserCred(email, password.value);
+                setValidUser(response?.data);
+            }
+        }
+        catch (err) {
+            if (!err?.response)
+                console.log("No Server Response");
+            else if (err.response?.status === 404)
+                console.log("No such User Email found");
+            else
+                console.log("Validation API Failed");
         }
     };
 
@@ -46,11 +57,12 @@ export function Login() {
     const redirectToHome = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
             if (isValidUser) {
-                alert("Successful Login -> Redirecting...");
+                toastSuccess("Login Successful");
                 setValidUser(false);
                 navigate("/MyReads/Home");
             }
-            else setEmailValidationMsg("Incorrect Email Id or Password");
+            else toastError("Incorrect Email Id or Password");
+            //TODO the above else state is not lasting long and immediatly getting refreshed, no wont delay will help this issue
         } else {
             setEmailValidationMsg("Please enter vaild Email Id or Password");
         }
