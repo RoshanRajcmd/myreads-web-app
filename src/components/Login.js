@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateUserCred } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
+import { IoMdEye } from "react-icons/io";
 
 export function Login() {
     const [email, setEmail] = useState('');
@@ -33,7 +34,8 @@ export function Login() {
         }
     }
 
-    const validateUserDetailsInDB = async () => {
+    //TODO - Async validation call the API on each letter of password user types in
+    const validateUserCredInDB = async () => {
         try {
             if (emailValidationMsg === "" && email !== "" && password.value !== "") {
                 const response = await validateUserCred(email, password.value);
@@ -51,7 +53,7 @@ export function Login() {
     };
 
     useEffect(() => {
-        validateUserDetailsInDB();
+        validateUserCredInDB();
     });
 
     const redirectToHome = () => {
@@ -62,7 +64,8 @@ export function Login() {
                 navigate("/MyReads/Home");
             }
             else toastError("Incorrect Email Id or Password");
-            //TODO the above else state is not lasting long and immediatly getting refreshed, no wont delay will help this issue
+            //TODO the above else state is not lasting long and immediatly getting refreshed, no delay will help this issue
+            //How about useRef - https://youtu.be/t2ypzz6gJm0
         } else {
             setEmailValidationMsg("Please enter vaild Email Id or Password");
         }
@@ -75,7 +78,7 @@ export function Login() {
     return (
         <div class="flex items-center justify-center
               min-h-screen bg-gray-200">
-            <div class="main bg-white rounded-lg shadow-md p-10 
+            <div class="main bg-white rounded-2xl shadow-md p-10 
     transition-transform w-96 text-center">
                 <h1 class="text-yellow-400 text-3xl">
                     MyReads
@@ -104,9 +107,7 @@ export function Login() {
                             required
                         />
                         <button type="button" class="focus:outline-none -ml-8" onClick={handlePasswordVisibility}>
-                            <img src=
-                                "https://media.geeksforgeeks.org/wp-content/uploads/20240227164304/visible.png"
-                                alt="View / Hide password" class="w-4"></img>
+                            <IoMdEye />
                         </button>
                     </div>
 
@@ -123,7 +124,7 @@ export function Login() {
                     <a href="#"
                         class="text-blue-500 hover:underline"
                         onClick={() => redirectToRegister()}
-                    >Register</a>
+                    > Register</a>
                 </p>
             </div>
         </div>

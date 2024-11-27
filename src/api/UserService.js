@@ -7,18 +7,18 @@ export async function addUser(user) {
     return await axios.post(API_URL, user);
 }
 
-export async function getUserById(id) {
-    return await axios.get(`${API_URL}/${id}`);
+export async function isUserByEmailExist(email) {
+    return await axios.get(`${API_URL}/${email}`);
 }
 
 export async function validateUserCred(email, password) {
     return await axios.get(`${API_URL}/${VALIDATE_USER}?email=${email}&password=${password}`);
 }
 
-export async function updateUser(user) {
+export async function updateUserDetails(user) {
     return await axios.put(API_URL, user);
 }
 
-export async function deleteUserById(id) {
-    return await axios.delete(`${API_URL}/${id}`);
+export async function deleteUserAccountById(email) {
+    return await axios.delete(`${API_URL}/${email}`);
 }
