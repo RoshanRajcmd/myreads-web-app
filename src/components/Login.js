@@ -63,6 +63,7 @@ export function Login() {
             }
             else toastError("Incorrect Email Id or Password");
             //TODO the above else state is not lasting long and immediatly getting refreshed, no wont delay will help this issue
+            //How about useRef - https://youtu.be/t2ypzz6gJm0
         } else {
             setEmailValidationMsg("Please enter vaild Email Id or Password");
         }
@@ -75,7 +76,7 @@ export function Login() {
     return (
         <div class="flex items-center justify-center
               min-h-screen bg-gray-200">
-            <div class="main bg-white rounded-lg shadow-md p-10 
+            <div class="main bg-white rounded-2xl shadow-md p-10 
     transition-transform w-96 text-center">
                 <h1 class="text-yellow-400 text-3xl">
                     MyReads

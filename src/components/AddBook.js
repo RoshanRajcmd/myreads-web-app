@@ -46,13 +46,13 @@ export function AddBook({ toggleAddBookModal }) {
             <h2>Add a book in your Library</h2>
             <span visible={errorMsg !== ""} style={{ color: 'red' }}>{errorMsg}</span>
             <form onSubmit={handleAddBook}>
-                < lable class="block mb-2 text-left text-gray-700 font-bold"> Book Title: </lable >
+                < lable class="block mt-2 mb-2 text-left text-gray-700 font-bold"> Book Title: </lable >
                 <input
                     type="text"
                     name="title"
                     value={bookData.title}
                     onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
+                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400"
                     required />
                 <lable class="block mb-2 text-left text-gray-700 font-bold">Book Summary: </lable>
                 <input
@@ -60,14 +60,14 @@ export function AddBook({ toggleAddBookModal }) {
                     name="summary"
                     value={bookData.summary}
                     onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2" />
+                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400" />
                 <lable class="block mb-2 text-left text-gray-700 font-bold">Published Date: </lable>
                 <input
                     type="date"
                     name="publishedOn"
                     value={bookData.publishedOn}
                     onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
+                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400"
                     required />
                 <lable class="block mb-2 text-left text-gray-700 font-bold">Book Author: </lable>
                 <input
@@ -75,11 +75,12 @@ export function AddBook({ toggleAddBookModal }) {
                     name="author"
                     value={bookData.author}
                     onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2"
+                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400"
                     required />
                 <button class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400">Add Book</button>
             </form >
 
+            {/* Add a Clear Button */}
             <button
                 onClick={() => toggleAddBookModal(false)}
                 class="text-blue-500 hover:underline mt-5">

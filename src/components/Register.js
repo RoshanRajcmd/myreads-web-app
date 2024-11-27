@@ -17,7 +17,7 @@ export function Register() {
     }
 
     const handlePassword = (enteredPassword) => {
-        //Need Validation of password and change the input box border color when the password is not valid
+        //TODO - Need Validation of password and change the input box border color when the password is not valid
         setPassword({ ...password, value: enteredPassword })
     }
 
@@ -48,13 +48,8 @@ export function Register() {
     const validateAndRedirectToLogin = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
             alert("Registeration Successful -> Redirecting...")
-            // //Comment the below useEffect line if you are working only on the front end
-            // //The below line will access the spring boot application running on the given port
-            // useEffect(() => {
-            //     fetch('http://localhost:8080/api/v1/user/getUsers')
-            //         .then(response => response.json())
-            //         .then(result => console.log(result));
-            // });
+            //TODO - API call to validate the user exists and toast to user
+            //TODO - API call to Add the user to DB
             navigate("/MyReads/Login");
         } else {
             alert("Please enter a valid Email Id and Password")
@@ -67,7 +62,7 @@ export function Register() {
     return (
         <div class="flex items-center justify-center
               min-h-screen bg-gray-200">
-            <div class="main bg-white rounded-lg shadow-md p-10 
+            <div class="main bg-white rounded-2xl shadow-md p-10 
         transition-transform w-96 text-center">
                 <h1 class="text-yellow-500 text-3xl">
                     MyReads
