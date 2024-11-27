@@ -124,7 +124,7 @@ export function Login() {
                     <a href="#"
                         class="text-blue-500 hover:underline"
                         onClick={() => redirectToRegister()}
-                    >Register</a>
+                    > Register</a>
                 </p>
             </div>
         </div>
