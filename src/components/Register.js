@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { isUserByEmailExist, addUser } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import Tooltip from './ToolTip';
+
 
 
 export function Register() {
@@ -104,14 +107,23 @@ export function Register() {
                     />
                     <span class="block mb-3 text-red-500" visible={emailValidationMsg !== '' ? true : false}>{emailValidationMsg}</span>
 
-                    <h3>The password must contain:</h3>
-                    <ul>
-                        <li>1. Minimum of 6 characters</li>
-                        <li>2. Any special character</li>
-                        <li>3. Must have atleast one number</li>
-                    </ul>
 
-                    <label for="passwordInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Password:</label>
+
+                    <label for="passwordInput" class="flex items-center mt-4 mb-2 text-left text-gray-700 font-bold gap-1">
+                        Password:
+                        <Tooltip message={
+                            <>
+                                <span>The password must contain:</span>
+                                <ul>
+                                    <li>Minimum of 6 characters</li>
+                                    <li>Any special character</li>
+                                    <li>Must have atleast one number</li>
+                                </ul>
+                            </>
+                        }>
+                            <IoMdInformationCircleOutline />
+                        </Tooltip>
+                    </label>
                     <div>
                         <input type={password.showPassword ? 'text' : 'password'}
                             class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
@@ -153,7 +165,7 @@ export function Register() {
                     >Login</a>
                 </p>
             </div>
-        </div>
+        </div >
     )
 
 }
