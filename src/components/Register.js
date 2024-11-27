@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isUserByEmailExist, addUser } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
+import { IoMdEye } from "react-icons/io";
 
 
 export function Register() {
@@ -120,9 +121,7 @@ export function Register() {
                             required
                         />
                         <button type="button" class="focus:outline-none -ml-8" onClick={handlePasswordVisibility}>
-                            <img src=
-                                "https://media.geeksforgeeks.org/wp-content/uploads/20240227164304/visible.png"
-                                alt="View Password" class="w-4"></img>
+                            <IoMdEye />
                         </button>
                     </div>
 

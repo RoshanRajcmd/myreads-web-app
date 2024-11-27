@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateUserCred } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
+import { IoMdEye } from "react-icons/io";
 
 export function Login() {
     const [email, setEmail] = useState('');
@@ -106,9 +107,7 @@ export function Login() {
                             required
                         />
                         <button type="button" class="focus:outline-none -ml-8" onClick={handlePasswordVisibility}>
-                            <img src=
-                                "https://media.geeksforgeeks.org/wp-content/uploads/20240227164304/visible.png"
-                                alt="View / Hide password" class="w-4"></img>
+                            <IoMdEye />
                         </button>
                     </div>
 
