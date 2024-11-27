@@ -33,7 +33,8 @@ export function Login() {
         }
     }
 
-    const validateUserDetailsInDB = async () => {
+    //TODO - Async validation call the API on each letter of password user types in
+    const validateUserCredInDB = async () => {
         try {
             if (emailValidationMsg === "" && email !== "" && password.value !== "") {
                 const response = await validateUserCred(email, password.value);
@@ -51,7 +52,7 @@ export function Login() {
     };
 
     useEffect(() => {
-        validateUserDetailsInDB();
+        validateUserCredInDB();
     });
 
     const redirectToHome = () => {
@@ -62,7 +63,7 @@ export function Login() {
                 navigate("/MyReads/Home");
             }
             else toastError("Incorrect Email Id or Password");
-            //TODO the above else state is not lasting long and immediatly getting refreshed, no wont delay will help this issue
+            //TODO the above else state is not lasting long and immediatly getting refreshed, no delay will help this issue
             //How about useRef - https://youtu.be/t2ypzz6gJm0
         } else {
             setEmailValidationMsg("Please enter vaild Email Id or Password");

@@ -7,6 +7,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
 } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,21 +18,27 @@ function App() {
     <div>
       <Router>
         <Routes>
+
+          {/* Reroute to Login as defaul path whenever the localhost path gets accessed */}
+          <Route path="/" element={<Navigate to="/MyReads/Login" />} />
           <Route
             exact
             path="/MyReads/Login"
-            element={<><Login /> </>}
+            element={<Login />}
           />
+
           <Route
             exact
             path="/MyReads/Register"
-            element={<><Register /> </>}
+            element={<Register />}
           />
+
           <Route
             exact
             path="/MyReads/Home"
             element={<BooksList />}
           />
+
         </Routes>
       </Router>
       <ToastContainer />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { isUserByEmailExist, addUser } from '../api/UserService';
+import { toastSuccess, toastError } from '../api/ToastService';
 
 
 export function Register() {
@@ -13,12 +14,12 @@ export function Register() {
     const navigate = useNavigate();
 
     const handlePasswordVisibility = () => {
-        setPassword({ ...password, showPassword: !password.showPassword })
+        setPassword({ ...password, showPassword: !password.showPassword });
     }
 
     const handlePassword = (enteredPassword) => {
         //TODO - Need Validation of password and change the input box border color when the password is not valid
-        setPassword({ ...password, value: enteredPassword })
+        setPassword({ ...password, value: enteredPassword });
     }
 
     const validateEmail = (email) => {
@@ -26,30 +27,36 @@ export function Register() {
         return re.test(email);
     }
 
+    const isEmailExist = async (email) => {
+        //TODO - API call to validate the user exists and toast to user
+        //await isUserByEmailExist(email);
+        return false;
+    }
+
     const handleEmail = (enteredEmail) => {
-        if (!validateEmail(enteredEmail)) {
-            setEmailValidationMsg("Please enter a valid email Id")
-        }
+        if (!validateEmail(enteredEmail))
+            setEmailValidationMsg("Please enter a valid email Id");
+        else if (isEmailExist(enteredEmail))
+            setEmailValidationMsg("Email Id is taken");
         else {
-            setEmail(enteredEmail.trim())
-            setEmailValidationMsg('')
+            setEmail(enteredEmail.trim());
+            setEmailValidationMsg('');
         }
     }
 
     const handleConfirmPassword = (comfirmationPassword) => {
         if (comfirmationPassword !== password.value) {
-            setConfirmPasswordMsg("Missmatch in Password")
+            setConfirmPasswordMsg("Missmatch in Password");
         }
         else {
-            setConfirmPasswordMsg('')
+            setConfirmPasswordMsg('');
         }
     }
 
     const validateAndRedirectToLogin = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
-            alert("Registeration Successful -> Redirecting...")
-            //TODO - API call to validate the user exists and toast to user
             //TODO - API call to Add the user to DB
+            alert("Registeration Successful -> Redirecting...")
             navigate("/MyReads/Login");
         } else {
             alert("Please enter a valid Email Id and Password")
