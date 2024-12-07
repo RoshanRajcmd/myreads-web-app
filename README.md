@@ -1,7 +1,8 @@
 # About
 
-![image](https://github.com/user-attachments/assets/0c6f9c4b-6396-4409-8a5a-a84c1fe74051)
-![image](https://github.com/user-attachments/assets/0d06bed1-8345-4c92-bb7a-cd10f3894811)
+![image](https://github.com/user-attachments/assets/66c898e6-edff-477e-8bbf-5db90c315c0f)
+![image](https://github.com/user-attachments/assets/027fdc4b-cd29-4965-aefb-dcf4ca392bb5)
+
 
 
 # Getting Started with Create React App
