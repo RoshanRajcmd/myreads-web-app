@@ -3,6 +3,7 @@ import React from 'react';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
 import { BooksList } from './components/BooksList';
+import { UpdateUserProfile } from './components/UpdateUserProfile';
 import {
   BrowserRouter as Router,
   Routes,
@@ -39,6 +40,11 @@ function App() {
             element={<BooksList />}
           />
 
+          <Route
+            exact
+            path="/MyReads/UpdateProfile"
+            element={<UpdateUserProfile />}
+          />
         </Routes>
       </Router>
       <ToastContainer />
