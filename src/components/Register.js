@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isUserByEmailExist, addUser } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
@@ -16,15 +16,28 @@ export function Register() {
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
+    const [isEmailIdTaken, setIsEmailIdTaken] = useState(true);
 
     const handleEmail = (enteredEmail) => {
-        if (!validateEmail(enteredEmail))
-            setEmailValidationMsg("Please enter a valid email Id");
-        else if (isEmailExist(enteredEmail))
-            setEmailValidationMsg("Email Id is taken");
-        else {
-            setEmail(enteredEmail.trim());
-            setEmailValidationMsg('');
+        if (enteredEmail !== undefined && enteredEmail !== '') {
+            if (!validateEmail(enteredEmail)) {
+                setEmailValidationMsg("Please enter a valid email Id");
+            }
+            else {
+                setEmail(enteredEmail.trim());
+                setEmailValidationMsg('');
+            }
+        }
+    }
+
+    // useEffect(() => {
+    //     isEmailExist(email);
+    // });
+
+    const isEmailExist = (email) => {
+        if (email !== undefined && email !== '') {
+            const response = isUserByEmailExist(email);
+            setIsEmailIdTaken(response.data);
         }
     }
 
@@ -53,18 +66,25 @@ export function Register() {
 
     const validateAndRedirectToLogin = () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
+            const newUser = {
+                name: { username },
+                dob: { dob },
+                email: { email },
+                password: { password }
+            }
             //TODO - API call to Add the user to DB
-            alert("Registeration Successful -> Redirecting...")
-            navigate("/MyReads/Login");
+            isEmailExist(email);
+            if (isEmailIdTaken) {
+                setEmailValidationMsg("Email Id is taken");
+            }
+            else {
+                setIsEmailIdTaken(true);
+                toastSuccess("Registration Successful");
+                navigate("/MyReads/Login");
+            }
         } else {
-            alert("Please enter a valid Email Id and Password")
+            toastError("Please correct the errors");
         }
-    }
-
-    const isEmailExist = async (email) => {
-        //TODO - API call to validate the user exists and toast to user
-        //await isUserByEmailExist(email);
-        return false;
     }
 
     const redirectToLoginWithoutValidation = () => {

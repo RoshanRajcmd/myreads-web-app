@@ -196,7 +196,7 @@ export function UpdateUserProfile() {
                 </form>
 
                 <div class="flex justify-center items-center mt-4">
-                    <p class="mr-3">I would like to Delete My account</p>
+                    <p class="mr-3">I would like to delete my account</p>
 
                     <button
                         class="border-none bg-red-500 rounded-lg"
