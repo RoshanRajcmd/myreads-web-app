@@ -9,7 +9,6 @@ export function Login() {
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
-    const [isValidUser, setValidUser] = useState(false);
 
     const handleEmail = (enteredEmail) => {
         if (!validateEmail(enteredEmail)) {
@@ -34,17 +33,13 @@ export function Login() {
         setPassword({ ...password, showPassword: !password.showPassword });
     }
 
-    useEffect(() => {
-        validateUserCredInDB();
-    });
-
-    //TODO - Async validation call the API on each letter of password user types in
     const validateUserCredInDB = async () => {
         try {
             if (emailValidationMsg === "" && email !== "" && password.value !== "") {
                 const response = await validateUserCred(email, password.value);
-                setValidUser(response?.data);
+                return response?.data;
             }
+            return false;
         }
         catch (err) {
             if (!err?.response)
@@ -56,16 +51,18 @@ export function Login() {
         }
     };
 
-    const redirectToHome = () => {
+    const validateAndRedirectToHome = async (e) => {
+        e.preventDefault();
+
+        //The below await key will let the execution pause until we get the promise resolved from the called function
+        var isValidUser = await validateUserCredInDB();
+
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
             if (isValidUser) {
                 toastSuccess("Login Successful");
-                setValidUser(false);
                 navigate("/myreads/home");
             }
             else toastError("Incorrect Email Id or Password");
-            //TODO the above else state is not lasting long and immediatly getting refreshed, no delay will help this issue
-            //How about useRef - https://youtu.be/t2ypzz6gJm0
         } else {
             setEmailValidationMsg("Please enter vaild Email Id or Password");
         }
@@ -119,7 +116,7 @@ export function Login() {
                         <button
                             type="submit"
                             class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
-                            onClick={redirectToHome}
+                            onClick={validateAndRedirectToHome}
                         >Submit</button>
                     </div>
                 </form>
