@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isUserByEmailExist, addUser } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
@@ -17,18 +17,35 @@ export function Register() {
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
 
-    const handleEmail = (enteredEmail) => {
-        if (!validateEmail(enteredEmail))
-            setEmailValidationMsg("Please enter a valid email Id");
-        else if (isEmailExist(enteredEmail))
-            setEmailValidationMsg("Email Id is taken");
-        else {
+    const handleEmail = async (enteredEmail) => {
+        if (enteredEmail !== undefined && enteredEmail !== '') {
             setEmail(enteredEmail.trim());
-            setEmailValidationMsg('');
+            if (isValidEmail(enteredEmail)) {
+                setEmailValidationMsg("");
+                var emailExists = await isEmailExists(enteredEmail);
+                console.log(emailExists);
+                if (emailExists) {
+                    setEmailValidationMsg("The Email Id is taken");
+                }
+                else {
+                    setEmailValidationMsg("");
+                }
+            }
+            else {
+                setEmailValidationMsg("Please enter a valid email Id");
+            }
         }
     }
 
-    const validateEmail = (email) => {
+    const isEmailExists = async (email) => {
+        if (email !== undefined && email !== '') {
+            const response = await isUserByEmailExist(email);
+            return response?.data;
+        }
+        return true;
+    }
+
+    const isValidEmail = (email) => {
         const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         return re.test(email);
     }
@@ -51,24 +68,27 @@ export function Register() {
         }
     }
 
-    const validateAndRedirectToLogin = () => {
-        if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
-            //TODO - API call to Add the user to DB
-            alert("Registeration Successful -> Redirecting...")
-            navigate("/MyReads/Login");
-        } else {
-            alert("Please enter a valid Email Id and Password")
-        }
-    }
+    const validateAndRedirectToLogin = (e) => {
+        e.preventDefault();
 
-    const isEmailExist = async (email) => {
-        //TODO - API call to validate the user exists and toast to user
-        //await isUserByEmailExist(email);
-        return false;
+        if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
+            const newUser = {
+                name: { username },
+                dob: { dob },
+                email: { email },
+                password: { password }
+            }
+            //TODO - API call to Add the user to DB
+
+            toastSuccess("Registration Successful");
+            navigate("/myreads/login");
+        }
+        else
+            toastError("Please correct the errors");
     }
 
     const redirectToLoginWithoutValidation = () => {
-        navigate("/MyReads/Login");
+        navigate("/myreads/login");
     }
 
     return (
