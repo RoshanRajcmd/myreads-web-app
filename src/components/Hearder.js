@@ -15,11 +15,11 @@ export function Header({ toggleAddBookModal, noOfBooks }) {
 
     const redirectToLogin = () => {
         toastSuccess("Logged Out");
-        navigate("/MyReads/Login");
+        navigate("/myreads/login");
     }
 
     const redirectToProfileUpdate = () => {
-        navigate("/MyReads/UpdateProfile");
+        navigate("/myreads/updateprofile");
     }
 
     return (

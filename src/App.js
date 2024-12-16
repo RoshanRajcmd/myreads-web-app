@@ -21,28 +21,28 @@ function App() {
         <Routes>
 
           {/* Reroute to Login as defaul path whenever the localhost path gets accessed */}
-          <Route path="/" element={<Navigate to="/MyReads/Login" />} />
+          <Route path="/" element={<Navigate to="/myreads/login" />} />
           <Route
             exact
-            path="/MyReads/Login"
+            path="/myreads/login"
             element={<Login />}
           />
 
           <Route
             exact
-            path="/MyReads/Register"
+            path="/myreads/register"
             element={<Register />}
           />
 
           <Route
             exact
-            path="/MyReads/Home"
+            path="/myreads/home"
             element={<BooksList />}
           />
 
           <Route
             exact
-            path="/MyReads/UpdateProfile"
+            path="/myreads/updateprofile"
             element={<UpdateUserProfile />}
           />
         </Routes>

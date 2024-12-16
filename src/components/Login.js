@@ -61,7 +61,7 @@ export function Login() {
             if (isValidUser) {
                 toastSuccess("Login Successful");
                 setValidUser(false);
-                navigate("/MyReads/Home");
+                navigate("/myreads/home");
             }
             else toastError("Incorrect Email Id or Password");
             //TODO the above else state is not lasting long and immediatly getting refreshed, no delay will help this issue
@@ -72,7 +72,7 @@ export function Login() {
     }
 
     const redirectToRegister = () => {
-        navigate("/MyReads/Register");
+        navigate("/myreads/register");
     }
 
     return (

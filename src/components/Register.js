@@ -80,7 +80,7 @@ export function Register() {
             else {
                 setIsEmailIdTaken(true);
                 toastSuccess("Registration Successful");
-                navigate("/MyReads/Login");
+                navigate("/myreads/login");
             }
         } else {
             toastError("Please correct the errors");
@@ -88,7 +88,7 @@ export function Register() {
     }
 
     const redirectToLoginWithoutValidation = () => {
-        navigate("/MyReads/Login");
+        navigate("/myreads/login");
     }
 
     return (
