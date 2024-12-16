@@ -16,32 +16,36 @@ export function Register() {
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
-    const [isEmailIdTaken, setIsEmailIdTaken] = useState(true);
 
-    const handleEmail = (enteredEmail) => {
+    const handleEmail = async (enteredEmail) => {
         if (enteredEmail !== undefined && enteredEmail !== '') {
-            if (!validateEmail(enteredEmail)) {
-                setEmailValidationMsg("Please enter a valid email Id");
+            setEmail(enteredEmail.trim());
+            if (isValidEmail(enteredEmail)) {
+                setEmailValidationMsg("");
+                var emailExists = await isEmailExists(enteredEmail);
+                console.log(emailExists);
+                if (emailExists) {
+                    setEmailValidationMsg("The Email Id is taken");
+                }
+                else {
+                    setEmailValidationMsg("");
+                }
             }
             else {
-                setEmail(enteredEmail.trim());
-                setEmailValidationMsg('');
+                setEmailValidationMsg("Please enter a valid email Id");
             }
         }
     }
 
-    // useEffect(() => {
-    //     isEmailExist(email);
-    // });
-
-    const isEmailExist = (email) => {
+    const isEmailExists = async (email) => {
         if (email !== undefined && email !== '') {
-            const response = isUserByEmailExist(email);
-            setIsEmailIdTaken(response.data);
+            const response = await isUserByEmailExist(email);
+            return response?.data;
         }
+        return true;
     }
 
-    const validateEmail = (email) => {
+    const isValidEmail = (email) => {
         const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         return re.test(email);
     }
@@ -64,7 +68,9 @@ export function Register() {
         }
     }
 
-    const validateAndRedirectToLogin = () => {
+    const validateAndRedirectToLogin = (e) => {
+        e.preventDefault();
+
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
             const newUser = {
                 name: { username },
@@ -73,18 +79,12 @@ export function Register() {
                 password: { password }
             }
             //TODO - API call to Add the user to DB
-            isEmailExist(email);
-            if (isEmailIdTaken) {
-                setEmailValidationMsg("Email Id is taken");
-            }
-            else {
-                setIsEmailIdTaken(true);
-                toastSuccess("Registration Successful");
-                navigate("/myreads/login");
-            }
-        } else {
-            toastError("Please correct the errors");
+
+            toastSuccess("Registration Successful");
+            navigate("/myreads/login");
         }
+        else
+            toastError("Please correct the errors");
     }
 
     const redirectToLoginWithoutValidation = () => {

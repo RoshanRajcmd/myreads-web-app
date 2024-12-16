@@ -34,21 +34,11 @@ export function Login() {
     }
 
     const validateUserCredInDB = async () => {
-        try {
-            if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-                const response = await validateUserCred(email, password.value);
-                return response?.data;
-            }
-            return false;
+        if (emailValidationMsg === "" && email !== "" && password.value !== "") {
+            const response = await validateUserCred(email, password.value);
+            return response?.data;
         }
-        catch (err) {
-            if (!err?.response)
-                console.log("No Server Response");
-            else if (err.response?.status === 404)
-                console.log("No such User Email found");
-            else
-                console.log("Validation API Failed");
-        }
+        return false;
     };
 
     const validateAndRedirectToHome = async (e) => {
