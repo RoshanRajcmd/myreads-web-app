@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateUserCred } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
@@ -112,10 +112,10 @@ export function Login() {
                 </form>
 
                 <p class="mt-4">Dont have an account?
-                    <a href="#"
-                        class="text-blue-500 hover:underline"
+                    <span
+                        class="ml-1 text-blue-500 hover:underline hover:cursor-pointer"
                         onClick={() => redirectToRegister()}
-                    > Register</a>
+                    >Register</span>
                 </p>
             </div>
         </div>

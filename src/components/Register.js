@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isUserByEmailExist, addUser } from '../api/UserService';
+import { isUserByEmailExist, addNewUser } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -23,7 +23,6 @@ export function Register() {
             if (isValidEmail(enteredEmail)) {
                 setEmailValidationMsg("");
                 var emailExists = await isEmailExists(enteredEmail);
-                console.log(emailExists);
                 if (emailExists) {
                     setEmailValidationMsg("The Email Id is taken");
                 }
@@ -68,20 +67,22 @@ export function Register() {
         }
     }
 
-    const validateAndRedirectToLogin = (e) => {
+    const validateAndRedirectToLogin = async (e) => {
         e.preventDefault();
 
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
-            const newUser = {
-                name: { username },
-                dob: { dob },
-                email: { email },
-                password: { password }
+            var newUser = {
+                name: username,
+                dob: dob,
+                email: email,
+                password: password.value
             }
-            //TODO - API call to Add the user to DB
-
-            toastSuccess("Registration Successful");
-            navigate("/myreads/login");
+            const response = await addNewUser(newUser);
+            if (response !== undefined && response.status === 200) {
+                toastSuccess("Registration Successful");
+                navigate("/myreads/login");
+            }
+            else toastError("Registration Failed please try again later");
         }
         else
             toastError("Please correct the errors");
@@ -192,10 +193,10 @@ export function Register() {
                 </form>
 
                 <p class="mt-4">Already have an account?
-                    <a href="#"
-                        class="text-blue-500 hover:underline"
+                    <span
+                        class="ml-1 text-blue-500 hover:underline hover:cursor-pointer"
                         onClick={() => redirectToLoginWithoutValidation()}
-                    > Login</a>
+                    >Login</span>
                 </p>
             </div>
         </div >
