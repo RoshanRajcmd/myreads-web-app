@@ -4,7 +4,7 @@ import { validateUserCred } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { AppConstants } from '../AppConstants';
-import { sessionUser } from '../api/SessionProvider';
+import { SessionService } from '../api/SessionService';
 import bcrypt1 from 'bcryptjs';
 
 var bcrypt = require('bcryptjs');
@@ -58,11 +58,10 @@ export function Login() {
         var userIDExists = await validateUserCredInDB();
 
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            console.log(userIDExists);
             if (userIDExists !== undefined && userIDExists != "") {
                 toastSuccess("Login Successful");
-                //set a session with usernname once validated
-                sessionUser.setSessionUserName(userIDExists);
+                //Sets a session with usernname once validated
+                SessionService.getInstance().setSessionUserName(userIDExists);
                 navigate("/myreads/home");
             }
             else toastError("Incorrect Email Id or Password");
