@@ -8,10 +8,11 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
+  Navigate
 } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PrivateRoute } from './components/PrivateRoute'
 
 function App() {
 
@@ -37,13 +38,13 @@ function App() {
           <Route
             exact
             path="/myreads/home"
-            element={<BooksList />}
+            element={<PrivateRoute><BooksList /></PrivateRoute>}
           />
 
           <Route
             exact
             path="/myreads/updateprofile"
-            element={<UpdateUserProfile />}
+            element={<PrivateRoute><UpdateUserProfile /></PrivateRoute>}
           />
         </Routes>
       </Router>

@@ -6,6 +6,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import Tooltip from './ToolTip';
+import { SessionService } from '../api/SessionService';
 
 
 
@@ -13,7 +14,8 @@ export function Header({ toggleAddBookModal, noOfBooks }) {
     const navigate = useNavigate();
     const profileDialogRef = useRef();
 
-    const redirectToLogin = () => {
+    const endSessionAndLogOut = () => {
+        SessionService.getInstance().setSessionUserName("");
         toastSuccess("Logged Out");
         navigate("/myreads/login");
     }
@@ -46,7 +48,7 @@ export function Header({ toggleAddBookModal, noOfBooks }) {
                         My Friends
                     </a>
                     <a
-                        onClick={redirectToLogin}
+                        onClick={endSessionAndLogOut}
                         class="flex items-center hover:underline hover:text-red-500 p-2">
                         Log Out
                         <IoIosLogOut class="ml-1" size="15px" />
