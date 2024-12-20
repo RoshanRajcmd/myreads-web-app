@@ -3,6 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { validateUserCred } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
+import { AppConstants } from '../AppConstants';
+import { sessionUser } from '../api/SessionProvider';
+import bcrypt1 from 'bcryptjs';
+
+var bcrypt = require('bcryptjs');
+var salt = bcrypt.genSaltSync(AppConstants.DECRYPE_SALT_INDEX);
 
 export function Login() {
     const navigate = useNavigate();
@@ -35,21 +41,28 @@ export function Login() {
 
     const validateUserCredInDB = async () => {
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
+            console.log(password.value);
+            //var encryptedPass = bcrypt.hashSync(password.value, salt);
+            //console.log(encryptedPass);
+            //const response = await validateUserCred(email, encryptedPass);
             const response = await validateUserCred(email, password.value);
             return response?.data;
         }
-        return false;
+        return "";
     };
 
     const validateAndRedirectToHome = async (e) => {
         e.preventDefault();
 
         //The below await key will let the execution pause until we get the promise resolved from the called function
-        var isValidUser = await validateUserCredInDB();
+        var userIDExists = await validateUserCredInDB();
 
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            if (isValidUser) {
+            console.log(userIDExists);
+            if (userIDExists !== undefined && userIDExists != "") {
                 toastSuccess("Login Successful");
+                //set a session with usernname once validated
+                sessionUser.setSessionUserName(userIDExists);
                 navigate("/myreads/home");
             }
             else toastError("Incorrect Email Id or Password");

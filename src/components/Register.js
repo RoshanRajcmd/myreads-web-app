@@ -6,8 +6,6 @@ import { IoMdEye } from "react-icons/io";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import Tooltip from './ToolTip';
 
-
-
 export function Register() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
