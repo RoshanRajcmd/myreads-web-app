@@ -13,7 +13,7 @@ export function Register() {
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
-    const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
+    const [passwordValidMsg, setPasswordValidMsg] = useState('');
 
     const handleEmail = async (enteredEmail) => {
         if (enteredEmail !== undefined && enteredEmail !== '') {
@@ -49,7 +49,22 @@ export function Register() {
 
     const handlePassword = (enteredPassword) => {
         //TODO - Need Validation of password and change the input box border color when the password is not valid
-        setPassword({ ...password, value: enteredPassword });
+        if (isValidPassword(enteredPassword)) {
+            setPassword({ ...password, value: enteredPassword });
+            setPasswordValidMsg("");
+        }
+        else
+            setPasswordValidMsg("Please set a strong password");
+    }
+
+    const isValidPassword = (enteredPassword) => {
+        //         ^(?=.*[a-z]): Ensures at least one lowercase letter.
+        // (?=.*[A-Z]): Ensures at least one uppercase letter.
+        // (?=.*\d): Ensures at least one digit.
+        // (?=.*[@$!%*?&]): Ensures at least one special character.
+        // [A-Za-z\d@$!%*?&]{8,}$: Ensures the password is at least 8 characters long.
+        let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{6,15}$/;
+        return regex.test(enteredPassword);
     }
 
     const handlePasswordVisibility = () => {
@@ -58,17 +73,17 @@ export function Register() {
 
     const handleConfirmPassword = (comfirmationPassword) => {
         if (comfirmationPassword !== password.value) {
-            setConfirmPasswordMsg("Missmatch in Password");
+            setPasswordValidMsg("Missmatch in Password");
         }
         else {
-            setConfirmPasswordMsg('');
+            setPasswordValidMsg('');
         }
     }
 
     const validateAndRedirectToLogin = async (e) => {
         e.preventDefault();
 
-        if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
+        if (emailValidationMsg === "" && email !== "" && password.value !== "" && passwordValidMsg === "") {
             var newUser = {
                 name: username,
                 dob: dob,
@@ -145,8 +160,9 @@ export function Register() {
                                             <span>The password must contain:</span>
                                             <ul>
                                                 <li>Minimum of 6 characters</li>
-                                                <li>Any special character</li>
-                                                <li>Must have atleast one number</li>
+                                                <li>Atleast one Capital Letter</li>
+                                                <li>Atleast one special character</li>
+                                                <li>Atleast one number</li>
                                             </ul>
                                         </>
                                     }>
@@ -176,7 +192,7 @@ export function Register() {
                                     onChange={(e) => handleConfirmPassword(e.target.value)}
                                     required
                                 />
-                                <span class="block mb-3 text-red-500" visible={confirmPasswordMsg !== '' ? true : false}>{confirmPasswordMsg}</span>
+                                <span class="block mb-3 text-red-500" visible={passwordValidMsg !== '' ? true : false}>{passwordValidMsg}</span>
                             </div>
                         </div>
                     </div>

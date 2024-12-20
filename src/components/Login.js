@@ -40,24 +40,21 @@ export function Login() {
     }
 
     const validateUserCredInDB = async () => {
-        if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            console.log(password.value);
-            //var encryptedPass = bcrypt.hashSync(password.value, salt);
-            //console.log(encryptedPass);
-            //const response = await validateUserCred(email, encryptedPass);
-            const response = await validateUserCred(email, password.value);
-            return response?.data;
-        }
-        return "";
+        console.log(password.value);
+        //var encryptedPass = bcrypt.hashSync(password.value, salt);
+        //console.log(encryptedPass);
+        //const response = await validateUserCred(email, encryptedPass);
+        const response = await validateUserCred(email, password.value);
+        return response?.data;
     };
 
     const validateAndRedirectToHome = async (e) => {
         e.preventDefault();
 
-        //The below await key will let the execution pause until we get the promise resolved from the called function
-        var userIDExists = await validateUserCredInDB();
-
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
+            //The below await key will let the execution pause until we get the promise resolved from the called function
+            var userIDExists = await validateUserCredInDB();
+
             if (userIDExists !== undefined && userIDExists != "") {
                 toastSuccess("Login Successful");
                 //Sets a session with usernname once validated
