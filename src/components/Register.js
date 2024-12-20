@@ -14,6 +14,29 @@ export function Register() {
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [passwordValidMsg, setPasswordValidMsg] = useState('');
+    const [dobvalidationMsg, setDobValidMsg] = useState('');
+
+    const handleDOB = (enteredDob) => {
+        if (isAdult(enteredDob)) {
+            setDob(enteredDob);
+            setDobValidMsg("");
+        }
+        else
+            setDobValidMsg("Adults can only Register");
+    }
+
+    const isAdult = (enteredDob) => {
+        const today = new Date();
+        const birthDate = new Date(enteredDob);
+        // Calculate age in years
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        // Adjust age if the birthday hasn't occurred this year
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age >= 18;
+    }
 
     const handleEmail = async (enteredEmail) => {
         if (enteredEmail !== undefined && enteredEmail !== '') {
@@ -48,7 +71,6 @@ export function Register() {
     }
 
     const handlePassword = (enteredPassword) => {
-        //TODO - Need Validation of password and change the input box border color when the password is not valid
         if (isValidPassword(enteredPassword)) {
             setPassword({ ...password, value: enteredPassword });
             setPasswordValidMsg("");
@@ -83,7 +105,7 @@ export function Register() {
     const validateAndRedirectToLogin = async (e) => {
         e.preventDefault();
 
-        if (emailValidationMsg === "" && email !== "" && password.value !== "" && passwordValidMsg === "") {
+        if (emailValidationMsg === "" && email !== "" && password.value !== "" && passwordValidMsg === "" && dobvalidationMsg === "") {
             var newUser = {
                 name: username,
                 dob: dob,
@@ -133,9 +155,10 @@ export function Register() {
                                 <input type="date"
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="dobInput"
-                                    onChange={(e) => setDob(e.target.value)}
+                                    onChange={(e) => handleDOB(e.target.value)}
                                     required
                                 />
+                                <span class="block mb-3 text-red-500" visible={dobvalidationMsg !== '' ? true : false}>{dobvalidationMsg}</span>
                             </div>
                         </div>
 
