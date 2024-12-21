@@ -58,7 +58,7 @@ export function Login() {
             if (userIDExists !== undefined && userIDExists != "") {
                 toastSuccess("Login Successful");
                 //Sets a session with usernname once validated
-                SessionService.getInstance().setSessionUserName(userIDExists);
+                SessionService.getInstance().setSessionUserID(userIDExists);
                 navigate("/myreads/home");
             }
             else toastError("Incorrect Email Id or Password");

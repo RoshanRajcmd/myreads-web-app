@@ -56,6 +56,14 @@ export async function updateUserDetails(user) {
     return await axios.put(API_URL, user);
 }
 
-export async function deleteUserAccountByEmail(email) {
-    return await axios.delete(`${API_URL}/${email}`);
+export async function deleteUserAccountByID(id) {
+    try {
+        return await axios.delete(`${API_URL}/${id}`);
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
 }

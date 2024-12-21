@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserDetails, deleteUserAccountByEmail } from '../api/UserService';
+import { updateUserDetails, deleteUserAccountByID } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import Tooltip from './ToolTip';
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { GiCancel } from "react-icons/gi";
+import { SessionService } from '../api/SessionService';
 
 
 
@@ -20,22 +21,34 @@ export function UpdateUserProfile() {
     const [dob, setDob] = useState('');
     const [oldPassword, setOldPassword] = useState({ value: "", showPassword: false });
     const [newPassword, setNewPassword] = useState({ value: "", showPassword: false });
-    const [passwordErrMsg, setPasswordErrMsg] = useState('');
+    const [passwordValidMsg, setPasswordValidMsg] = useState('');
+    const [dobvalidationMsg, setDobValidMsg] = useState('');
 
 
     const redirectToHomeWithoutValidation = () => {
         navigate("/MyReads/Home");
     }
 
-    const updateAndRedirectToHome = () => {
-        //If Username updated add it new attribute list
-        if (oldPassword.value !== "" && passwordErrMsg === "") {
-            //TODO - API call to update the user to DB
-            toastSuccess("Profile Updated");
-            navigate("/MyReads/Home");
-        } else {
-            toastError("Failed to Update Profile");
+    const handleDOB = (enteredDob) => {
+        if (isAdult(enteredDob)) {
+            setDob(enteredDob);
+            setDobValidMsg("");
         }
+        else
+            setDobValidMsg("Adults can only Register");
+    }
+
+    const isAdult = (enteredDob) => {
+        const today = new Date();
+        const birthDate = new Date(enteredDob);
+        // Calculate age in years
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        // Adjust age if the birthday hasn't occurred this year
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age >= 18;
     }
 
     const handlePasswordVisibility = (isOld) => {
@@ -48,25 +61,68 @@ export function UpdateUserProfile() {
     const handlePassword = (isOld, enteredPassword) => {
         if (isOld)
             setOldPassword({ ...oldPassword, value: enteredPassword });
-        else
-            setNewPassword({ ...newPassword, value: enteredPassword });
+        else {
+            if (isValidPassword(enteredPassword)) {
+                setNewPassword({ ...newPassword, value: enteredPassword });
+                setPasswordValidMsg("");
+            }
+            else
+                setPasswordValidMsg("Please set a strong password");
+        }
+    }
+
+    const isValidPassword = (enteredPassword) => {
+        //         ^(?=.*[a-z]): Ensures at least one lowercase letter.
+        // (?=.*[A-Z]): Ensures at least one uppercase letter.
+        // (?=.*\d): Ensures at least one digit.
+        // (?=.*[@$!%*?&]): Ensures at least one special character.
+        // [A-Za-z\d@$!%*?&]{8,}$: Ensures the password is at least 8 characters long.
+        let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{6,15}$/;
+        return regex.test(enteredPassword);
     }
 
     const handleConfirmPassword = (comfirmationPassword) => {
         if (comfirmationPassword !== newPassword.value) {
-            setPasswordErrMsg("Missmatch in New Password");
+            setPasswordValidMsg("Missmatch in New Password");
         }
         else {
-            setPasswordErrMsg('');
+            setPasswordValidMsg('');
         }
-    }
-
-    const deleteUserAccount = () => {
-        //TODO - call for deleteUserAccountByEmail
     }
 
     const confirmAccountDeletion = (show) => {
         show ? deleteAccountRef.current.showModal() : deleteAccountRef.current.close();
+    }
+
+    const deleteUserAccount = async () => {
+        //TODO - call for deleteUserAccountByEmail
+        const response = await deleteUserAccountByID(SessionService.getInstance().getSessionUserID());
+        if (response !== undefined && response.status === 200) {
+            toastSuccess("Account Deleted :(");
+            navigate("/myreads/login");
+        }
+        else toastError("Account Deletion Failed please try again later");
+    }
+
+    const updateAndRedirectToHome = async (e) => {
+        e.preventDefault();
+
+        if (passwordValidMsg === "" && dobvalidationMsg === "") {
+            var updatedUser = {
+                name: username,
+                dob: dob,
+                email: email,
+                password: newPassword.value
+            }
+            const response = await updateUserDetails(updatedUser);
+            if (response !== undefined && response.status === 200) {
+                toastSuccess("Updated Successful");
+                navigate("/myreads/Home");
+            }
+            else toastError("Failed to Update, please try again later");
+        }
+        else
+            toastError("Please correct the errors");
     }
 
     return (
@@ -101,9 +157,10 @@ export function UpdateUserProfile() {
                                 <input type="date"
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="dobInput"
-                                    onChange={(e) => setDob(e.target.value)}
+                                    onChange={(e) => handleDOB(e.target.value)}
                                     required
                                 />
+                                <span class="block mb-3 text-red-500" visible={dobvalidationMsg !== '' ? true : false}>{dobvalidationMsg}</span>
                             </div>
                         </div>
 
@@ -148,8 +205,9 @@ export function UpdateUserProfile() {
                                             <span>The password must contain:</span>
                                             <ul>
                                                 <li>Minimum of 6 characters</li>
-                                                <li>Any special character</li>
-                                                <li>Must have atleast one number</li>
+                                                <li>Atleast one Capital Letter</li>
+                                                <li>Atleast one special character</li>
+                                                <li>Atleast one number</li>
                                             </ul>
                                         </>
                                     }>
@@ -182,7 +240,7 @@ export function UpdateUserProfile() {
                                 />
                             </div>
 
-                            <span class="block mb-3 text-red-500" visible={passwordErrMsg !== '' ? true : false}>{passwordErrMsg}</span>
+                            <span class="block mb-3 text-red-500" visible={passwordValidMsg !== '' ? true : false}>{passwordValidMsg}</span>
                         </div>
                     </div>
 
@@ -208,11 +266,12 @@ export function UpdateUserProfile() {
                     </button>
                 </div>
 
-                <dialog ref={deleteAccountRef} class="bg-white rounded-lg p-6 font-bold" >
-                    <span>Deletion of Account will be permanent and will NOT be reverted back.
+                <dialog ref={deleteAccountRef} class="bg-white rounded-lg p-6" >
+                    <span class="font-medium text-gray-600">Deletion of Account will be permanent and CANNOT be reverted back.
+                        <br /> Your Book contributions will not be deleted
                         <br /> Do you still want to proceed?</span>
 
-                    <div class="space-x-10 mt-4">
+                    <div class="space-x-10 mt-4 font-bold">
                         <button class="rounded-md p-4 text-white bg-red-500"
                             onClick={() => deleteUserAccount()}>Yes</button>
 

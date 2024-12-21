@@ -14,11 +14,11 @@ export class SessionService {
             return new SessionService();
     }
 
-    getSessionUserName() {
+    getSessionUserID() {
         return this.username;
     }
 
-    setSessionUserName(name) {
+    setSessionUserID(name) {
         this.username = name;
     }
 
