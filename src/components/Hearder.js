@@ -15,7 +15,6 @@ export function Header({ toggleAddBookModal, noOfBooks }) {
     const profileDialogRef = useRef();
 
     const endSessionAndLogOut = () => {
-        SessionService.getInstance().setSessionUserID("");
         SessionService.getInstance().setSessionUserDetials(undefined);
         toastSuccess("Logged Out");
         navigate("/myreads/login");

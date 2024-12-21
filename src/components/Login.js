@@ -15,6 +15,7 @@ export function Login() {
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
+    const userSession = SessionService.getInstance();
 
     const handleEmail = (enteredEmail) => {
         if (!validateEmail(enteredEmail)) {
@@ -59,8 +60,7 @@ export function Login() {
                 //Sets a session with userdetails once validated
                 var sessionUserResp = await getUserDetailsById(userIDExists);
                 if (sessionUserResp.data !== undefined) {
-                    //SessionService.getInstance().setSessionUserID(userIDExists);
-                    SessionService.getInstance().setSessionUserDetials(sessionUserResp.data);
+                    userSession.setSessionUserDetials(sessionUserResp.data);
                     toastSuccess("Login Successful");
                     navigate("/myreads/home");
                 }

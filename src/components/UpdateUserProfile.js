@@ -23,6 +23,7 @@ export function UpdateUserProfile() {
     const [newPassword, setNewPassword] = useState({ value: "", showPassword: false });
     const [passwordValidMsg, setPasswordValidMsg] = useState('');
     const [dobvalidationMsg, setDobValidMsg] = useState('');
+    const userSession = SessionService.getInstance();
 
 
     const redirectToHomeWithoutValidation = () => {
@@ -96,7 +97,7 @@ export function UpdateUserProfile() {
 
     const deleteUserAccount = async () => {
         //TODO - call for deleteUserAccountByEmail
-        const response = await deleteUserAccountByID(SessionService.getInstance().getSessionUserID());
+        const response = await deleteUserAccountByID(userSession.getSessionUserID());
         if (response !== undefined && response.status === 200) {
             toastSuccess("Account Deleted :(");
             navigate("/myreads/login");
@@ -137,9 +138,9 @@ export function UpdateUserProfile() {
                 </div>
                 <p class="text-yellow-500 text-3xl font-semibold"> Profile </p>
 
-                <p class="text-s mb-4">Details of user under the Email id: {email} will be updated</p>
+                <p class="text-s mb-4">Details of user under the Email: {userSession.getSessionUserEmail()} will be updated</p>
                 <form >
-                    <div class="flex gap-5">
+                    <div class="flex gap-5 justify-between">
                         <div>
                             <div>
                                 <label for="userNameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
@@ -147,6 +148,7 @@ export function UpdateUserProfile() {
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="userNameInput"
                                     placeholder='Enter your Name'
+                                    value={userSession.getSessionUsername()}
                                     onChange={(e) => setUsername(e.target.value)}
                                     required
                                 />
@@ -158,6 +160,7 @@ export function UpdateUserProfile() {
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="dobInput"
                                     onChange={(e) => handleDOB(e.target.value)}
+                                    value={userSession.getSessionUserDob()}
                                     required
                                 />
                                 <span class="block mb-3 text-red-500" visible={dobvalidationMsg !== '' ? true : false}>{dobvalidationMsg}</span>
@@ -174,8 +177,9 @@ export function UpdateUserProfile() {
                                             <span>The password must contain:</span>
                                             <ul>
                                                 <li>Minimum of 6 characters</li>
-                                                <li>Any special character</li>
-                                                <li>Must have atleast one number</li>
+                                                <li>Atleast one Capital Letter</li>
+                                                <li>Atleast one special character</li>
+                                                <li>Atleast one number</li>
                                             </ul>
                                         </>
                                     }>
@@ -257,9 +261,9 @@ export function UpdateUserProfile() {
                     <p class="mr-3">I would like to delete my account</p>
 
                     <button
-                        class="border-none bg-red-500 rounded-lg"
+                        class="border-none bg-red-500 rounded-lg hover:bg-red-400"
                         onClick={() => confirmAccountDeletion(true)}>
-                        <span class="flex items-center text-white hover:underline p-2">
+                        <span class="flex items-center text-white p-2">
                             <MdOutlineDeleteForever />
                             Delete Account
                         </span>
@@ -272,10 +276,10 @@ export function UpdateUserProfile() {
                         <br /> Do you still want to proceed?</span>
 
                     <div class="space-x-10 mt-4 font-bold">
-                        <button class="rounded-md p-4 text-white bg-red-500"
+                        <button class="rounded-md p-4 text-white bg-red-500 hover:bg-red-400"
                             onClick={() => deleteUserAccount()}>Yes</button>
 
-                        <button class="rounded-md p-4 text-white bg-green-500"
+                        <button class="rounded-md p-4 text-white bg-green-500 hover:bg-green-400"
                             onClick={() => confirmAccountDeletion(false)}>No</button>
                     </div>
                 </dialog>

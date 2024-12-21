@@ -58,10 +58,6 @@ export async function getUserDetailsById(id) {
     }
 }
 
-export async function getFriendsOfUser(id) {
-    //TODO - Returns list of friends
-}
-
 export async function updateUserDetails(user) {
     return await axios.put(API_URL, user);
 }
