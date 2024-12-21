@@ -95,7 +95,7 @@ export function Register() {
 
     const handleConfirmPassword = (comfirmationPassword) => {
         if (comfirmationPassword !== password.value) {
-            setPasswordValidMsg("Missmatch in Password");
+            setPasswordValidMsg("Mismatch in Password");
         }
         else {
             setPasswordValidMsg('');

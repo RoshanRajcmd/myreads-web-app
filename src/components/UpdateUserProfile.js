@@ -35,7 +35,7 @@ export function UpdateUserProfile() {
             setDobValidMsg("");
         }
         else
-            setDobValidMsg("Adults can only Register");
+            setDobValidMsg("Age cannot be less than 18");
     }
 
     const isAdult = (enteredDob) => {
@@ -83,7 +83,7 @@ export function UpdateUserProfile() {
 
     const handleConfirmPassword = (comfirmationPassword) => {
         if (comfirmationPassword !== newPassword.value) {
-            setPasswordValidMsg("Missmatch in New Password");
+            setPasswordValidMsg("Mismatch in New Password");
         }
         else {
             setPasswordValidMsg('');

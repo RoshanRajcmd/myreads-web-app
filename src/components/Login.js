@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateUserCred } from '../api/UserService';
+import { validateUserCred, getUserDetailsById } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { AppConstants } from '../AppConstants';
@@ -56,10 +56,15 @@ export function Login() {
             var userIDExists = await validateUserCredInDB();
 
             if (userIDExists !== undefined && userIDExists != "") {
-                toastSuccess("Login Successful");
-                //Sets a session with usernname once validated
-                SessionService.getInstance().setSessionUserID(userIDExists);
-                navigate("/myreads/home");
+                //Sets a session with userdetails once validated
+                var sessionUserResp = await getUserDetailsById(userIDExists);
+                if (sessionUserResp.data !== undefined) {
+                    //SessionService.getInstance().setSessionUserID(userIDExists);
+                    SessionService.getInstance().setSessionUserDetials(sessionUserResp.data);
+                    toastSuccess("Login Successful");
+                    navigate("/myreads/home");
+                }
+                else toastError("Failed to Create Session Please try again later");
             }
             else toastError("Incorrect Email Id or Password");
         } else {

@@ -1,7 +1,12 @@
 export class SessionService {
 
     constructor() {
-        this.username = "";
+        this.user = {
+            userId: "",
+            username: "",
+            dob: "",
+            email: ""
+        }
         // Save the instance for reuse
         SessionService.instance = this;
     }
@@ -15,11 +20,26 @@ export class SessionService {
     }
 
     getSessionUserID() {
-        return this.username;
+        return this.user.userId;
     }
 
-    setSessionUserID(name) {
-        this.username = name;
+    setSessionUserID(userId) {
+        this.user.userId = userId;
+    }
+
+    setSessionUserDetials(sessionUser) {
+        if (sessionUser !== undefined) {
+            this.user.userId = sessionUser.id;
+            this.user.username = sessionUser.name;
+            this.user.dob = sessionUser.dob;
+            this.user.email = sessionUser.email;
+        }
+        else {
+            this.user.userId = "";
+            this.user.username = "";
+            this.user.dob = "";
+            this.user.email = "";
+        }
     }
 
 };
