@@ -6,6 +6,7 @@ const CHECK_EMAIL_EXIST = 'checkEmailExists';
 const ADD_NEW_USER = 'addNewUser';
 const DELETE_USER = 'deleteUser';
 const GET_USER_DETAILS = 'getUserDetails';
+const UPDATE_USER_DETAILS = 'updateUserDetails';
 
 //If a user by that email exist return their ID else returns -1 or 0
 export async function isUserByEmailExist(email) {
@@ -58,8 +59,16 @@ export async function getUserDetailsById(id) {
     }
 }
 
-export async function updateUserDetails(user) {
-    return await axios.put(API_URL, user);
+export async function updateUserDetails(id, user) {
+    try {
+        return await axios.put(`${API_URL}/${UPDATE_USER_DETAILS}/${id}`, JSON.stringify(user), { headers: { 'Content-Type': 'application/json' } });
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
 }
 
 export async function deleteUserAccountByID(id) {
