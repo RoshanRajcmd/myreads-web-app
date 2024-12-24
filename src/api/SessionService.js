@@ -3,7 +3,8 @@ export class SessionService {
     constructor() {
         this.user = {
             userId: "",
-            username: "",
+            fullName: "",
+            userName: "",
             dob: "",
             email: ""
         }
@@ -19,27 +20,40 @@ export class SessionService {
             return new SessionService();
     }
 
-    getSessionUserID() {
-        return this.user.userId;
-    }
-
-    setSessionUserID(userId) {
-        this.user.userId = userId;
-    }
-
     setSessionUserDetials(sessionUser) {
         if (sessionUser !== undefined) {
             this.user.userId = sessionUser.id;
-            this.user.username = sessionUser.name;
+            this.user.fullName = sessionUser.fullName;
+            this.user.userName = sessionUser.userName;
             this.user.dob = sessionUser.dob;
             this.user.email = sessionUser.email;
         }
         else {
             this.user.userId = "";
-            this.user.username = "";
+            this.user.fullName = "";
+            this.user.userName = "";
             this.user.dob = "";
             this.user.email = "";
         }
     }
 
+    getSessionUser() {
+        return this.user;
+    }
+
+    getSessionUserID() {
+        return this.user.userId;
+    }
+
+    getSessionUsername() {
+        return this.user.username;
+    }
+
+    getSessionUserDob() {
+        return this.user.dob;
+    }
+
+    getSessionUserEmail() {
+        return this.user.email;
+    }
 };

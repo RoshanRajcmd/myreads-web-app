@@ -8,6 +8,7 @@ import Tooltip from './ToolTip';
 
 export function Register() {
     const navigate = useNavigate();
+    const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
     const [dob, setDob] = useState('');
     const [email, setEmail] = useState('');
@@ -15,6 +16,11 @@ export function Register() {
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [passwordValidMsg, setPasswordValidMsg] = useState('');
     const [dobvalidationMsg, setDobValidMsg] = useState('');
+
+    const handleUsername = (enteredUsername) => {
+        //TODO - Add a check to see if the username is already taken
+        setUsername(enteredUsername.trim());
+    }
 
     const handleDOB = (enteredDob) => {
         if (isAdult(enteredDob)) {
@@ -72,7 +78,7 @@ export function Register() {
 
     const handlePassword = (enteredPassword) => {
         if (isValidPassword(enteredPassword)) {
-            setPassword({ ...password, value: enteredPassword });
+            setPassword({ ...password, value: enteredPassword.trim() });
             setPasswordValidMsg("");
         }
         else
@@ -107,7 +113,8 @@ export function Register() {
 
         if (emailValidationMsg === "" && email !== "" && password.value !== "" && passwordValidMsg === "" && dobvalidationMsg === "") {
             var newUser = {
-                name: username,
+                fullName: fullName,
+                userName: username,
                 dob: dob,
                 email: email,
                 password: password.value
@@ -140,12 +147,23 @@ export function Register() {
                     <div class="flex gap-5">
                         <div>
                             <div>
+                                <label for="nameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Full Name:</label>
+                                <input type="text"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    id="nameInput"
+                                    placeholder='Enter Full Name'
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div>
                                 <label for="userNameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
                                 <input type="text"
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="userNameInput"
-                                    placeholder='Enter your Name'
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder='Enter Username'
+                                    onChange={(e) => handleUsername(e.target.value)}
                                     required
                                 />
                             </div>

@@ -87,12 +87,12 @@ export function Login() {
 
                 <form>
                     <div>
-                        <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
+                        <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Email:</label>
 
                         <input type="text"
                             class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                             id="emailInput"
-                            placeholder="Enter your Username/Email"
+                            placeholder="Enter your Email"
                             onChange={(e) => handleEmail(e.target.value)}
                             required
                         />

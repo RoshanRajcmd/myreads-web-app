@@ -16,21 +16,20 @@ export function UpdateUserProfile() {
     const oldPasswordInputRef = useRef();
     const newPasswordInputRef = useRef();
     const deleteAccountRef = useRef();
-    var email;
     const [username, setUsername] = useState('');
     const [dob, setDob] = useState('');
     const [oldPassword, setOldPassword] = useState({ value: "", showPassword: false });
     const [newPassword, setNewPassword] = useState({ value: "", showPassword: false });
     const [passwordValidMsg, setPasswordValidMsg] = useState('');
-    const [dobvalidationMsg, setDobValidMsg] = useState('');
-    const userSession = SessionService.getInstance();
+    const [userNameTakenMsg, setDobValidMsg] = useState('');
+    var userOnSession = SessionService.getInstance().getSessionUser();
 
 
     const redirectToHomeWithoutValidation = () => {
         navigate("/MyReads/Home");
     }
 
-    const handleDOB = (enteredDob) => {
+    const handleName = (enteredDob) => {
         if (isAdult(enteredDob)) {
             setDob(enteredDob);
             setDobValidMsg("");
@@ -61,10 +60,10 @@ export function UpdateUserProfile() {
 
     const handlePassword = (isOld, enteredPassword) => {
         if (isOld)
-            setOldPassword({ ...oldPassword, value: enteredPassword });
+            setOldPassword({ ...oldPassword, value: enteredPassword.trim() });
         else {
-            if (isValidPassword(enteredPassword)) {
-                setNewPassword({ ...newPassword, value: enteredPassword });
+            if (isValidPassword(enteredPassword.trim())) {
+                setNewPassword({ ...newPassword, value: enteredPassword.trim() });
                 setPasswordValidMsg("");
             }
             else
@@ -97,7 +96,7 @@ export function UpdateUserProfile() {
 
     const deleteUserAccount = async () => {
         //TODO - call for deleteUserAccountByEmail
-        const response = await deleteUserAccountByID(userSession.getSessionUserID());
+        const response = await deleteUserAccountByID(userOnSession.userId);
         if (response !== undefined && response.status === 200) {
             toastSuccess("Account Deleted :(");
             navigate("/myreads/login");
@@ -108,14 +107,9 @@ export function UpdateUserProfile() {
     const updateAndRedirectToHome = async (e) => {
         e.preventDefault();
 
-        if (passwordValidMsg === "" && dobvalidationMsg === "") {
-            var updatedUser = {
-                name: username,
-                dob: dob,
-                email: email,
-                password: newPassword.value
-            }
-            const response = await updateUserDetails(updatedUser);
+        if (passwordValidMsg === "" && userNameTakenMsg === "") {
+            var updatedUserRequest = createUserByChangedAttrs();
+            const response = await updateUserDetails(updatedUserRequest);
             if (response !== undefined && response.status === 200) {
                 toastSuccess("Updated Successful");
                 navigate("/myreads/Home");
@@ -124,6 +118,21 @@ export function UpdateUserProfile() {
         }
         else
             toastError("Please correct the errors");
+    }
+
+    const createUserByChangedAttrs = () => {
+        var updatedUserRequest = userOnSession;
+
+        if ((oldPassword == "" && newPassword != "") || (oldPassword != "" && newPassword == "")) {
+            setPasswordValidMsg("Enter Old & New password to update")
+        }
+        else {
+            if (username !== undefined &&
+                username !== "" &&
+                !updatedUserRequest.userName.equals(username))
+                updatedUserRequest.userName = username;
+        }
+        return updatedUserRequest;
     }
 
     return (
@@ -138,32 +147,32 @@ export function UpdateUserProfile() {
                 </div>
                 <p class="text-yellow-500 text-3xl font-semibold"> Profile </p>
 
-                <p class="text-s mb-4">Details of user under the Email: {userSession.getSessionUserEmail()} will be updated</p>
+                <p class="text-s mb-4">Details of user under the Email: {userOnSession.email} will be updated</p>
                 <form >
                     <div class="flex gap-5 justify-between">
                         <div>
+                            <div>
+                                <label for="nameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Full Name:</label>
+                                <input type="text"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    id="nameInput"
+                                    onChange={(e) => handleName(e.target.value)}
+                                    value={userOnSession.fullName}
+                                    required
+                                />
+                            </div>
+
                             <div>
                                 <label for="userNameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
                                 <input type="text"
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="userNameInput"
                                     placeholder='Enter your Name'
-                                    value={userSession.getSessionUsername()}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    value={userOnSession.userName}
+                                    onChange={(e) => setUsername(e.target.value.trim())}
                                     required
                                 />
-                            </div>
-
-                            <div>
-                                <label for="dobInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Date of Birth:</label>
-                                <input type="date"
-                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
-                                    id="dobInput"
-                                    onChange={(e) => handleDOB(e.target.value)}
-                                    value={userSession.getSessionUserDob()}
-                                    required
-                                />
-                                <span class="block mb-3 text-red-500" visible={dobvalidationMsg !== '' ? true : false}>{dobvalidationMsg}</span>
+                                <span class="block mb-3 text-red-500" visible={userNameTakenMsg !== '' ? true : false}>{userNameTakenMsg}</span>
                             </div>
                         </div>
 

@@ -3,11 +3,13 @@ import { BookCard } from './BookCard';
 import { Header } from './Hearder';
 import { toastError } from '../api/ToastService';
 import { AddBook } from './AddBook';
+import { SessionService } from '../api/SessionService';
 
 export function BooksList() {
     const [booksData, setBooksData] = useState();
     const [currentPage, setCurrentPage] = useState();
     const addBookModalRef = useRef();
+    const userSession = SessionService.getInstance();
 
     //An async function that getALL the books of the given page no each
     //by given size. By defaul the page and size value is 0, 10
@@ -41,9 +43,9 @@ export function BooksList() {
         }
     }
 
-    useEffect(() => {
-        getAllBooks();
-    }, [])
+    // useEffect(() => {
+    //     getAllBooks();
+    // }, [])
 
     const toggleAddBookModal = (show) => {
         //Dialog.showModal will show the Dialog, dialog.close() to close it
