@@ -101,7 +101,7 @@ export async function deleteUserAccountByID(id) {
 
 export async function isOldPasswordValid(id, enteredPassword) {
     try {
-        return await axios.get(`${API_URL}/${CHECK_OLD_PASSWORD_VALID}?email=${id}&password=${enteredPassword}`);
+        return await axios.get(`${API_URL}/${CHECK_OLD_PASSWORD_VALID}?userId=${id}&oldPassword=${enteredPassword}`);
     }
     catch (err) {
         if (!err?.response)

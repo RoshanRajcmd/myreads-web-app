@@ -5,8 +5,8 @@ export class SessionService {
             userId: "",
             fullName: "",
             userName: "",
-            dob: "",
-            email: ""
+            email: "",
+            password: ""
         }
         // Save the instance for reuse
         SessionService.instance = this;
@@ -25,14 +25,14 @@ export class SessionService {
             this.user.userId = sessionUser.id;
             this.user.fullName = sessionUser.fullName;
             this.user.userName = sessionUser.userName;
-            this.user.dob = sessionUser.dob;
+            this.user.password = sessionUser.password;
             this.user.email = sessionUser.email;
         }
         else {
             this.user.userId = "";
             this.user.fullName = "";
             this.user.userName = "";
-            this.user.dob = "";
+            this.user.password = "";
             this.user.email = "";
         }
     }

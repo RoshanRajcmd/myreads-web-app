@@ -124,11 +124,14 @@ export function UpdateUserProfile() {
         e.preventDefault();
 
         if (passwordValidMsg === "" && userNameTakenMsg === "") {
-            var updatedUserRequest = createUserByChangedAttrs();
+            var updatedUserRequest = await createUserByChangedAttrs();
+            //console.log(updatedUserRequest);
             const response = await updateUserDetails(userOnSession.userId, updatedUserRequest);
-            if (response !== undefined && response.status === 200) {
+            //console.log(response);
+            if (response !== undefined && response?.status === 200) {
                 //Update the session user details with the updated user details
                 var sessionUserResp = await getUserDetailsById(userOnSession.userId);
+                //console.log(sessionUserResp);
                 if (sessionUserResp.data !== undefined) {
                     SessionService.getInstance().setSessionUserDetials(sessionUserResp.data);
                 }
@@ -154,21 +157,28 @@ export function UpdateUserProfile() {
             userName !== "" &&
             updatedUserRequest.userName !== userName)
             updatedUserRequest.userName = userName;
-        if (oldPassword !== "" && (await isValidOldPassword() === true)) {
-            if (newPassword !== "") {
-                updatedUserRequest.password = newPassword.value;
-            } else {
-                toastError("Password cannot be updated without Old&New Password");
-                return updatedUserRequest;
+        if (oldPassword !== undefined && oldPassword !== "") {
+            if (await isValidOldPassword() === true) {
+                if (newPassword !== "") {
+                    updatedUserRequest.password = newPassword.value;
+                }
+                else
+                    toastError("Password cannot be updated, Check new Password");
             }
+            else
+                toastError("Password cannot be updated, Old Password is incorrect");
         }
 
         return updatedUserRequest;
     }
 
     const isValidOldPassword = async () => {
-        //TODO - check the isOldPasswordValid function
-        const response = await isOldPasswordValid();
+        const response = await isOldPasswordValid(userOnSession.userId, oldPassword.value);
+        if (response !== undefined && response?.status === 200) {
+            //console.log(response);
+            return response?.data;
+        }
+        return false;
     }
 
     return (
