@@ -1,4 +1,4 @@
-import { React, useRef } from 'react'
+import { React, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toastSuccess } from '../api/ToastService';
 import { ImBooks } from "react-icons/im";
@@ -7,12 +7,18 @@ import { FaPlus } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import Tooltip from './ToolTip';
 import { SessionService } from '../api/SessionService';
-
-
+import { IoSunny } from "react-icons/io5";
+import { IoMoon } from "react-icons/io5";
 
 export function Header({ toggleAddBookModal, noOfBooks }) {
     const navigate = useNavigate();
     const profileDialogRef = useRef();
+    const [dark, setDark] = useState(false);
+
+    const darkModeHandler = () => {
+        setDark(!dark);
+        document.body.classList.toggle("dark");
+    }
 
     const endSessionAndLogOut = () => {
         SessionService.getInstance().setSessionUserDetials(undefined);
@@ -25,15 +31,22 @@ export function Header({ toggleAddBookModal, noOfBooks }) {
     }
 
     return (
-        <header class="flex justify-between mt-6 p-4">
+        <header class="flex justify-between items-center mt-6 p-4 relative">
             <div class="flex overflow-hidden gap-4">
                 <p class="flex items-center">
                     <ImBooks class="mr-1 text-gray-800" size="20px" />My Books List: {noOfBooks}
                 </p>
-                <button onClick={() => toggleAddBookModal(true)} class="flex items-center text-white bg-yellow-500 text-xs font-medium p-3 whitespace-normal rounded-3xl drop-shadow-xl">
-                    <FaPlus class="mr-1" size="15px" />Add New Book
-                </button>
             </div>
+
+            <button onClick={() => toggleAddBookModal(true)} class="flex left-1/2 transform -translate-x-1/2 text-white bg-yellow-500 text-xs font-medium p-3 whitespace-normal rounded-3xl drop-shadow-xl">
+                <FaPlus class="mr-1" size="15px" />Add New Book
+            </button>
+
+            {/* render moon when dark is false */}
+            <button onClick={() => darkModeHandler()}>
+                {dark && <IoSunny size="25px" />}
+                {!dark && <IoMoon size="25px" />}
+            </button>
 
             <div class="group relative cursor-pointer">
                 <CgProfile size="33px" />

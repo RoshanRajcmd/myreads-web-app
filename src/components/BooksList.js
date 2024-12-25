@@ -53,7 +53,7 @@ export function BooksList() {
 
             <div class="my-5 mx-52 gap-4" >
                 {/* The Below line will check the content of booksData of length is 0 means this no data and then it will return the <div> block when its true*/}
-                {booksData?.content?.length === 0 && <div>No Books Added</div>}
+                {booksData?.content?.length === 0 && <div class="flex items-center justify-center text-gray-800 text-4xl">No Books Added</div>}
 
                 {/* Listing all the BookCards */}
                 <ul class="grid grid-cols-auto-fill-280 gap-16">
