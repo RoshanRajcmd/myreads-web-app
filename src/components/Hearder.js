@@ -28,9 +28,9 @@ export function Header({ toggleAddBookModal, noOfBooks }) {
         <header class="flex justify-between mt-6 p-4">
             <div class="flex overflow-hidden gap-4">
                 <p class="flex items-center">
-                    <ImBooks class="mr-1" size="20px" />My Books List {noOfBooks}
+                    <ImBooks class="mr-1 text-gray-800" size="20px" />My Books List: {noOfBooks}
                 </p>
-                <button onClick={() => toggleAddBookModal(true)} class="flex items-center fixed right-20 text-white bg-yellow-500 text-xs font-medium p-3 whitespace-normal rounded-3xl drop-shadow-xl">
+                <button onClick={() => toggleAddBookModal(true)} class="flex items-center text-white bg-yellow-500 text-xs font-medium p-3 whitespace-normal rounded-3xl drop-shadow-xl">
                     <FaPlus class="mr-1" size="15px" />Add New Book
                 </button>
             </div>

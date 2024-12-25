@@ -9,6 +9,7 @@ const GET_USER_DETAILS = 'getUserDetails';
 const UPDATE_USER_DETAILS = 'updateUserDetails';
 const CHECK_USERNAME_EXISTS = 'checkUsernameExists';
 const CHECK_OLD_PASSWORD_VALID = 'checkOldPasswordValid'
+const GET_USER_BOOKS = 'getUserBooks';
 
 //If a user by that email exist return their ID else returns empty string
 export async function isUserByEmailExist(email) {
@@ -102,6 +103,18 @@ export async function deleteUserAccountByID(id) {
 export async function isOldPasswordValid(id, enteredPassword) {
     try {
         return await axios.get(`${API_URL}/${CHECK_OLD_PASSWORD_VALID}?userId=${id}&oldPassword=${enteredPassword}`);
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
+}
+
+export async function getUserBooks(id, page, size) {
+    try {
+        return await axios.get(`${API_URL}/${GET_USER_BOOKS}/${id}/?page=${page}&size=${size}`);
     }
     catch (err) {
         if (!err?.response)

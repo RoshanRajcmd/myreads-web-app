@@ -4,12 +4,14 @@ import { Header } from './Hearder';
 import { toastError } from '../api/ToastService';
 import { AddBook } from './AddBook';
 import { SessionService } from '../api/SessionService';
+import { getUserBooks } from '../api/UserService';
 
 export function BooksList() {
     const [booksData, setBooksData] = useState();
     const [currentPage, setCurrentPage] = useState();
     const addBookModalRef = useRef();
-    const userSession = SessionService.getInstance();
+    const userOnSession = SessionService.getInstance();
+    console.log(userOnSession);
 
     //An async function that getALL the books of the given page no each
     //by given size. By defaul the page and size value is 0, 10
@@ -17,25 +19,12 @@ export function BooksList() {
         try {
             setCurrentPage(page);
             //TODO - Implement the below line when doing CRUD functions of Books
-            //const {books} =await getAllBooks(page, size);
-            const bookData = [
-                {
-                    id: 1,
-                    title: "Book1",
-                    summary: "Test Summary",
-                    publishedOn: "10-12-2002",
-                    author: "Roshan"
-                },
-                {
-                    id: 1,
-                    title: "Book2",
-                    summary: "Test Summary",
-                    publishedOn: "12-07-2012",
-                    author: "Raj"
-                }
-            ];
-            setBooksData(bookData);
-            console.log(bookData);
+            const booksResp = await getUserBooks(userOnSession.getSessionUserID(), page, size);
+            if (booksResp?.data?.content !== undefined) {
+                setBooksData(booksResp.data);
+            }
+            else toastError("Failed to find Books");
+            console.log(booksResp);
         }
         catch (error) {
             console.log(error);
@@ -43,9 +32,9 @@ export function BooksList() {
         }
     }
 
-    // useEffect(() => {
-    //     getAllBooks();
-    // }, [])
+    useEffect(() => {
+        getAllBooks();
+    }, [])
 
     const toggleAddBookModal = (show) => {
         //Dialog.showModal will show the Dialog, dialog.close() to close it
@@ -55,24 +44,25 @@ export function BooksList() {
 
     return (
         <>
-            <div><Header toggleAddBookModal={toggleAddBookModal} nbOfContacts={2} /></div>
+
+            <div><Header toggleAddBookModal={toggleAddBookModal} noOfBooks={booksData?.content.length} /></div>
 
             <dialog ref={addBookModalRef} class="rounded-3xl">
                 <AddBook toggleAddBookModal={toggleAddBookModal} />
             </dialog>
 
-            <div class="mt-5 ml-0 mr-0" >
-                {/* The Below line will check the content of booksData of lenght is 0 means this no data and then it will return the <div> block when its true*/}
-                {booksData?.content?.lenght === 0 && <div>No Books Added</div>}
+            <div class="my-5 mx-52 gap-4" >
+                {/* The Below line will check the content of booksData of length is 0 means this no data and then it will return the <div> block when its true*/}
+                {booksData?.content?.length === 0 && <div>No Books Added</div>}
 
                 {/* Listing all the BookCards */}
-                <ol class="grid grid-rows-2 gap-4">
+                <ul class="grid grid-cols-auto-fill-280 gap-16">
                     {/* The Below line will return each booksData in the content as <Book> block when its true*/}
-                    {booksData?.content?.lenght > 0 && booksData.content.map(book => <BookCard book={book} key={book.id} />)}
-                </ol>
+                    {booksData?.content?.length > 0 && booksData.content.map(book => <BookCard book={book} key={book.id} />)}
+                </ul>
 
                 {/* Page Navigation over the booksData list show */}
-                {booksData?.content?.lenght > 0 && booksData?.totalPages > 1 &&
+                {booksData?.content?.length > 0 && booksData?.totalPages > 1 &&
                     <div>
                         <a onClick={() => getAllBooks(currentPage - 1)}
                             class={0 === currentPage ? "pointer-events-none opacity-60" : ''}>
