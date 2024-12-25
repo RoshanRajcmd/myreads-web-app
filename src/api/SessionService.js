@@ -21,6 +21,7 @@ export class SessionService {
     }
 
     setSessionUserDetials(sessionUser) {
+        //console.log(sessionUser);
         if (sessionUser !== undefined) {
             this.user.userId = sessionUser.id;
             this.user.fullName = sessionUser.fullName;

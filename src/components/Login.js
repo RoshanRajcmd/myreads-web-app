@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { validateUserCred, getUserDetailsById } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
-import { AppConstants } from '../AppConstants';
 import { SessionService } from '../api/SessionService';
 //import bcrypt1 from 'bcryptjs';
 
 // var bcrypt = require('bcryptjs');
-// var salt = bcrypt.genSaltSync(AppConstants.DECRYPE_SALT_INDEX);
 // const DECRYPE_SALT_INDEX = 10;
+// var salt = bcrypt.genSaltSync(DECRYPE_SALT_INDEX);
 
 export function Login() {
     const navigate = useNavigate();
@@ -17,6 +16,7 @@ export function Login() {
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const userSession = SessionService.getInstance();
+    //console.log(userSession);
 
     const handleEmail = (enteredEmail) => {
         if (!validateEmail(enteredEmail)) {
