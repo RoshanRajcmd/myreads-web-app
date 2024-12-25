@@ -1,18 +1,34 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { React, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FaBook } from "react-icons/fa";
+import { ImCheckboxUnchecked } from "react-icons/im";
+import { IoIosCheckbox } from "react-icons/io";
+
 
 export function BookCard({ book }) {
+    const [marked, setMarked] = useState(false);
+
+    const handleRead = () => {
+        setMarked(!marked);
+    }
+
     return (
-        <Link to={`/books/${book.id}`} class="w-full bg-slate-200 p-3 rounded-3xl cursor-pointer min-h-max">
-            <div class="flex flex-row justify-start items-center flex-wrap gap-3">
-                <i class="fa fa-solid fa-book"></i>
-                <p class="text-lg bg-slate-100 text-center rounded-lg font-semibold p-1">{book.title.substring(0, 15)}</p>
-                <p className="contact_title">{book.author}</p>
+        <div class="w-full bg-slate-200 p-5 mb-2 rounded-3xl min-h-max min-w-80 max-w-80">
+            <div class="flex flex-row items-center flex-wrap gap-1">
+                <FaBook />
+                <p class="text-lg text-center rounded-lg font-semibold text-gray-800 p-1 hover:bg-yellow-500">{book.title}</p>
+                <div class="flex justify-end items-center hover:cursor-pointer ml-auto" onClick={() => handleRead()}>
+                    {marked && <IoIosCheckbox size="20px" />}
+                    {!marked && <ImCheckboxUnchecked />}
+                </div>
+            </div>
+            <div class="flex flex-row gap-3 items-center">
+                <p class="font-thin text-sm">{book.publishedOn}</p>
+                <p className="text-xs font-medium">{book.author}</p>
             </div>
             <div class="mt-4">
-                <p class="text-base text-wrap">{book.summary.substring(0, 20)}</p>
-                <p class="font-thin text-sm">{book.publishedOn}</p>
+                <p class="text-base text-wrap text-gray-800">{book.summary}</p>
             </div>
-        </Link>
+        </div>
     )
 }

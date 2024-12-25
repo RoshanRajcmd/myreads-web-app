@@ -23,7 +23,7 @@ export function UpdateUserProfile() {
     const [newPassword, setNewPassword] = useState({ value: "", showPassword: false });
     const [passwordValidMsg, setPasswordValidMsg] = useState('');
     const [userNameTakenMsg, setUserNameTakenMsg] = useState('');
-
+    //console.log(userOnSession);
 
     const redirectToHome = () => {
         navigate("/MyReads/Home");

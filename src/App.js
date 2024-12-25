@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import { React, useState } from 'react';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
 import { BooksList } from './components/BooksList';
@@ -15,6 +15,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { PrivateRoute } from './components/PrivateRoute'
 
 function App() {
+  const [dark, setDark] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDark(!dark);
+    document.body.classList.toggle("dark");
+  }
 
   return (
     <div>
@@ -38,13 +44,13 @@ function App() {
           <Route
             exact
             path="/myreads/home"
-            element={<PrivateRoute><BooksList /></PrivateRoute>}
+            element={<PrivateRoute><BooksList toggleDarkMode={toggleDarkMode} /></PrivateRoute>}
           />
 
           <Route
             exact
             path="/myreads/updateprofile"
-            element={<PrivateRoute><UpdateUserProfile /></PrivateRoute>}
+            element={<PrivateRoute><UpdateUserProfile toggleDarkMode={toggleDarkMode} /></PrivateRoute>}
           />
         </Routes>
       </Router>
