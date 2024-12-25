@@ -2,20 +2,36 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:8080/myreads/api/v1/user';
 const VALIDATE_USER = 'validateUser';
-const CHECK_EMAIL_EXIST = 'checkEmailExists';
+const CHECK_EMAIL_EXISTS = 'checkEmailExists';
 const ADD_NEW_USER = 'addNewUser';
 const DELETE_USER = 'deleteUser';
 const GET_USER_DETAILS = 'getUserDetails';
 const UPDATE_USER_DETAILS = 'updateUserDetails';
+const CHECK_USERNAME_EXISTS = 'checkUsernameExists';
+const CHECK_OLD_PASSWORD_VALID = 'checkOldPasswordValid'
 
-//If a user by that email exist return their ID else returns -1 or 0
+//If a user by that email exist return their ID else returns empty string
 export async function isUserByEmailExist(email) {
     try {
-        return await axios.get(`${API_URL}/${CHECK_EMAIL_EXIST}/${email}`);
+        return await axios.get(`${API_URL}/${CHECK_EMAIL_EXISTS}/${email}`);
     }
     catch (err) {
         if (!err?.response)
             console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
+}
+
+export async function isUserNameTakeninDB(username) {
+    try {
+        return await axios.get(`${API_URL}/${CHECK_USERNAME_EXISTS}/${username}`);
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else if (err.response?.status === 404)
+            console.log("No such User Email found");
         else
             console.log("Validation API Failed" + err.code + err.message);
     }
@@ -74,6 +90,18 @@ export async function updateUserDetails(id, user) {
 export async function deleteUserAccountByID(id) {
     try {
         return await axios.delete(`${API_URL}/${DELETE_USER}/${id}`);
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
+}
+
+export async function isOldPasswordValid(id, enteredPassword) {
+    try {
+        return await axios.get(`${API_URL}/${CHECK_OLD_PASSWORD_VALID}?email=${id}&password=${enteredPassword}`);
     }
     catch (err) {
         if (!err?.response)

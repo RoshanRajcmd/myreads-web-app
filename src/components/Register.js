@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isUserByEmailExist, addNewUser } from '../api/UserService';
+import { isUserByEmailExist, addNewUser, isUserNameTakeninDB } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -9,17 +9,49 @@ import Tooltip from './ToolTip';
 export function Register() {
     const navigate = useNavigate();
     const [fullName, setFullName] = useState('');
-    const [username, setUsername] = useState('');
+    const [userName, setUserName] = useState('');
     const [dob, setDob] = useState('');
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
     const [passwordValidMsg, setPasswordValidMsg] = useState('');
     const [dobvalidationMsg, setDobValidMsg] = useState('');
+    const [userNameTakenMsg, setUserNameTakenMsg] = useState('');
 
-    const handleUsername = (enteredUsername) => {
-        //TODO - Add a check to see if the username is already taken
-        setUsername(enteredUsername.trim());
+    const handleFullName = (enteredFullName) => {
+        //Any special characters are not allowed
+        if (enteredFullName !== undefined &&
+            enteredFullName !== "" &&
+            isValidFullName(enteredFullName)) {
+            setFullName(enteredFullName.trim());
+            setUserNameTakenMsg("");
+        }
+    }
+
+    const isValidFullName = (enteredFullName) => {
+        let regex = /^[a-zA-Z\s]+$/;
+        return regex.test(enteredFullName);
+    }
+
+    const handleUserName = async (enteredUserName) => {
+        let regex = /^[a-zA-Z0-9_]{5,20}$/;
+        if (regex.test(enteredUserName)) {
+            //Check if the entered username is already taken
+            if (await isUserNameTaken(enteredUserName) === false) {
+                setUserNameTakenMsg("");
+            }
+            else setUserNameTakenMsg("Username already taken");
+        }
+        else setUserNameTakenMsg("Please enter a valid Username");
+        setUserName(enteredUserName.trim());
+    }
+
+    const isUserNameTaken = async (enteredUserName) => {
+        const response = await isUserNameTakeninDB(enteredUserName);
+        if (response !== undefined && response.status === 200) {
+            return response?.data;
+        }
+        return true;
     }
 
     const handleDOB = (enteredDob) => {
@@ -111,10 +143,10 @@ export function Register() {
     const validateAndRedirectToLogin = async (e) => {
         e.preventDefault();
 
-        if (emailValidationMsg === "" && email !== "" && password.value !== "" && passwordValidMsg === "" && dobvalidationMsg === "") {
+        if (emailValidationMsg === "" && email !== "" && password.value !== "" && passwordValidMsg === "" && dobvalidationMsg === "" && userNameTakenMsg === "") {
             var newUser = {
                 fullName: fullName,
-                userName: username,
+                userName: userName,
                 dob: dob,
                 email: email,
                 password: password.value
@@ -152,20 +184,36 @@ export function Register() {
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="nameInput"
                                     placeholder='Enter Full Name'
-                                    onChange={(e) => setFullName(e.target.value)}
+                                    onChange={(e) => handleFullName(e.target.value)}
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label for="userNameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
+                                <label for="userNameInput" class="flex items-center mt-4 mb-2 text-left text-gray-700 font-bold">
+                                    Username:
+                                    <Tooltip message={
+                                        <>
+                                            <span>The Username must contain:</span>
+                                            <ul>
+                                                <li>Minimum of 5 characters</li>
+                                                <li>Can have '_'</li>
+                                                <li>No special character</li>
+                                                <li>Numbers are allowed</li>
+                                            </ul>
+                                        </>
+                                    }>
+                                        <IoMdInformationCircleOutline />
+                                    </Tooltip>
+                                </label>
                                 <input type="text"
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="userNameInput"
                                     placeholder='Enter Username'
-                                    onChange={(e) => handleUsername(e.target.value)}
+                                    onChange={(e) => handleUserName(e.target.value)}
                                     required
                                 />
+                                <span class="block mb-3 text-red-500" visible={userNameTakenMsg !== '' ? true : false}>{userNameTakenMsg}</span>
                             </div>
 
                             <div>

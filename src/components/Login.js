@@ -5,10 +5,10 @@ import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { AppConstants } from '../AppConstants';
 import { SessionService } from '../api/SessionService';
-import bcrypt1 from 'bcryptjs';
+//import bcrypt1 from 'bcryptjs';
 
-var bcrypt = require('bcryptjs');
-var salt = bcrypt.genSaltSync(AppConstants.DECRYPE_SALT_INDEX);
+// var bcrypt = require('bcryptjs');
+// var salt = bcrypt.genSaltSync(AppConstants.DECRYPE_SALT_INDEX);
 
 export function Login() {
     const navigate = useNavigate();
@@ -56,7 +56,7 @@ export function Login() {
             //The below await key will let the execution pause until we get the promise resolved from the called function
             var userIDExists = await validateUserCredInDB();
 
-            if (userIDExists !== undefined && userIDExists != "") {
+            if (userIDExists !== undefined && userIDExists !== "") {
                 //Sets a session with userdetails once validated
                 var sessionUserResp = await getUserDetailsById(userIDExists);
                 if (sessionUserResp.data !== undefined) {
