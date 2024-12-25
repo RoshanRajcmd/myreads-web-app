@@ -9,6 +9,7 @@ import { SessionService } from '../api/SessionService';
 
 // var bcrypt = require('bcryptjs');
 // var salt = bcrypt.genSaltSync(AppConstants.DECRYPE_SALT_INDEX);
+// const DECRYPE_SALT_INDEX = 10;
 
 export function Login() {
     const navigate = useNavigate();
