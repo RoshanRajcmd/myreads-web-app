@@ -16,7 +16,7 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 1. User session handling throughout the website
 2. User Credential Validation
 3. Valid Email, password, DOB during Registration and User Profile Update
-4. Existing Email validation
+4. Existing Email ID and Username validation
 5. Password Mismatch validation on new password
 6. CRUD functionality on both Users and Books
 
