@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateUserCred } from '../api/UserService';
+import { validateUserCred, getUserDetailsById } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { AppConstants } from '../AppConstants';
 import { SessionService } from '../api/SessionService';
-import bcrypt1 from 'bcryptjs';
+//import bcrypt1 from 'bcryptjs';
 
-var bcrypt = require('bcryptjs');
-var salt = bcrypt.genSaltSync(AppConstants.DECRYPE_SALT_INDEX);
+// var bcrypt = require('bcryptjs');
+// var salt = bcrypt.genSaltSync(AppConstants.DECRYPE_SALT_INDEX);
 
 export function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
+    const userSession = SessionService.getInstance();
 
     const handleEmail = (enteredEmail) => {
         if (!validateEmail(enteredEmail)) {
@@ -40,29 +41,30 @@ export function Login() {
     }
 
     const validateUserCredInDB = async () => {
-        if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            console.log(password.value);
-            //var encryptedPass = bcrypt.hashSync(password.value, salt);
-            //console.log(encryptedPass);
-            //const response = await validateUserCred(email, encryptedPass);
-            const response = await validateUserCred(email, password.value);
-            return response?.data;
-        }
-        return "";
+        console.log(password.value);
+        //var encryptedPass = bcrypt.hashSync(password.value, salt);
+        //console.log(encryptedPass);
+        //const response = await validateUserCred(email, encryptedPass);
+        const response = await validateUserCred(email, password.value);
+        return response?.data;
     };
 
     const validateAndRedirectToHome = async (e) => {
         e.preventDefault();
 
-        //The below await key will let the execution pause until we get the promise resolved from the called function
-        var userIDExists = await validateUserCredInDB();
-
         if (emailValidationMsg === "" && email !== "" && password.value !== "") {
-            if (userIDExists !== undefined && userIDExists != "") {
-                toastSuccess("Login Successful");
-                //Sets a session with usernname once validated
-                SessionService.getInstance().setSessionUserName(userIDExists);
-                navigate("/myreads/home");
+            //The below await key will let the execution pause until we get the promise resolved from the called function
+            var userIDExists = await validateUserCredInDB();
+
+            if (userIDExists !== undefined && userIDExists !== "") {
+                //Sets a session with userdetails once validated
+                var sessionUserResp = await getUserDetailsById(userIDExists);
+                if (sessionUserResp.data !== undefined) {
+                    userSession.setSessionUserDetials(sessionUserResp.data);
+                    toastSuccess("Login Successful");
+                    navigate("/myreads/home");
+                }
+                else toastError("Failed to Create Session Please try again later");
             }
             else toastError("Incorrect Email Id or Password");
         } else {
@@ -85,12 +87,12 @@ export function Login() {
 
                 <form>
                     <div>
-                        <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
+                        <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Email:</label>
 
                         <input type="text"
                             class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                             id="emailInput"
-                            placeholder="Enter your Username/Email"
+                            placeholder="Enter your Email"
                             onChange={(e) => handleEmail(e.target.value)}
                             required
                         />

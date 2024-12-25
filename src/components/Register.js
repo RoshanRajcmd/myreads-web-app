@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isUserByEmailExist, addNewUser } from '../api/UserService';
+import { isUserByEmailExist, addNewUser, isUserNameTakeninDB } from '../api/UserService';
 import { toastSuccess, toastError } from '../api/ToastService';
 import { IoMdEye } from "react-icons/io";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -8,12 +8,73 @@ import Tooltip from './ToolTip';
 
 export function Register() {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [userName, setUserName] = useState('');
     const [dob, setDob] = useState('');
     const [email, setEmail] = useState('');
     const [emailValidationMsg, setEmailValidationMsg] = useState('');
     const [password, setPassword] = useState({ value: "", showPassword: false });
-    const [confirmPasswordMsg, setConfirmPasswordMsg] = useState('');
+    const [passwordValidMsg, setPasswordValidMsg] = useState('');
+    const [dobvalidationMsg, setDobValidMsg] = useState('');
+    const [userNameTakenMsg, setUserNameTakenMsg] = useState('');
+
+    const handleFullName = (enteredFullName) => {
+        //Any special characters are not allowed
+        if (enteredFullName !== undefined &&
+            enteredFullName !== "" &&
+            isValidFullName(enteredFullName)) {
+            setFullName(enteredFullName.trim());
+            setUserNameTakenMsg("");
+        }
+    }
+
+    const isValidFullName = (enteredFullName) => {
+        let regex = /^[a-zA-Z\s]+$/;
+        return regex.test(enteredFullName);
+    }
+
+    const handleUserName = async (enteredUserName) => {
+        let regex = /^[a-zA-Z0-9_]{5,20}$/;
+        if (regex.test(enteredUserName)) {
+            //Check if the entered username is already taken
+            if (await isUserNameTaken(enteredUserName) === false) {
+                setUserNameTakenMsg("");
+            }
+            else setUserNameTakenMsg("Username already taken");
+        }
+        else setUserNameTakenMsg("Please enter a valid Username");
+        setUserName(enteredUserName.trim());
+    }
+
+    const isUserNameTaken = async (enteredUserName) => {
+        const response = await isUserNameTakeninDB(enteredUserName);
+        if (response !== undefined && response.status === 200) {
+            return response?.data;
+        }
+        return true;
+    }
+
+    const handleDOB = (enteredDob) => {
+        if (isAdult(enteredDob)) {
+            setDob(enteredDob);
+            setDobValidMsg("");
+        }
+        else
+            setDobValidMsg("Adults can only Register");
+    }
+
+    const isAdult = (enteredDob) => {
+        const today = new Date();
+        const birthDate = new Date(enteredDob);
+        // Calculate age in years
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        // Adjust age if the birthday hasn't occurred this year
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age >= 18;
+    }
 
     const handleEmail = async (enteredEmail) => {
         if (enteredEmail !== undefined && enteredEmail !== '') {
@@ -48,8 +109,22 @@ export function Register() {
     }
 
     const handlePassword = (enteredPassword) => {
-        //TODO - Need Validation of password and change the input box border color when the password is not valid
-        setPassword({ ...password, value: enteredPassword });
+        if (isValidPassword(enteredPassword)) {
+            setPassword({ ...password, value: enteredPassword.trim() });
+            setPasswordValidMsg("");
+        }
+        else
+            setPasswordValidMsg("Please set a strong password");
+    }
+
+    const isValidPassword = (enteredPassword) => {
+        //         ^(?=.*[a-z]): Ensures at least one lowercase letter.
+        // (?=.*[A-Z]): Ensures at least one uppercase letter.
+        // (?=.*\d): Ensures at least one digit.
+        // (?=.*[@$!%*?&]): Ensures at least one special character.
+        // [A-Za-z\d@$!%*?&]{8,}$: Ensures the password is at least 8 characters long.
+        let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{6,15}$/;
+        return regex.test(enteredPassword);
     }
 
     const handlePasswordVisibility = () => {
@@ -58,19 +133,20 @@ export function Register() {
 
     const handleConfirmPassword = (comfirmationPassword) => {
         if (comfirmationPassword !== password.value) {
-            setConfirmPasswordMsg("Missmatch in Password");
+            setPasswordValidMsg("Mismatch in Password");
         }
         else {
-            setConfirmPasswordMsg('');
+            setPasswordValidMsg('');
         }
     }
 
     const validateAndRedirectToLogin = async (e) => {
         e.preventDefault();
 
-        if (emailValidationMsg === "" && email !== "" && password.value !== "" && confirmPasswordMsg === "") {
+        if (emailValidationMsg === "" && email !== "" && password.value !== "" && passwordValidMsg === "" && dobvalidationMsg === "" && userNameTakenMsg === "") {
             var newUser = {
-                name: username,
+                fullName: fullName,
+                userName: userName,
                 dob: dob,
                 email: email,
                 password: password.value
@@ -103,14 +179,41 @@ export function Register() {
                     <div class="flex gap-5">
                         <div>
                             <div>
-                                <label for="userNameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Username:</label>
+                                <label for="nameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Full Name:</label>
+                                <input type="text"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    id="nameInput"
+                                    placeholder='Enter Full Name'
+                                    onChange={(e) => handleFullName(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label for="userNameInput" class="flex items-center mt-4 mb-2 text-left text-gray-700 font-bold">
+                                    Username:
+                                    <Tooltip message={
+                                        <>
+                                            <span>The Username must contain:</span>
+                                            <ul>
+                                                <li>Minimum of 5 characters</li>
+                                                <li>Can have '_'</li>
+                                                <li>No special character</li>
+                                                <li>Numbers are allowed</li>
+                                            </ul>
+                                        </>
+                                    }>
+                                        <IoMdInformationCircleOutline />
+                                    </Tooltip>
+                                </label>
                                 <input type="text"
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="userNameInput"
-                                    placeholder='Enter your Name'
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder='Enter Username'
+                                    onChange={(e) => handleUserName(e.target.value)}
                                     required
                                 />
+                                <span class="block mb-3 text-red-500" visible={userNameTakenMsg !== '' ? true : false}>{userNameTakenMsg}</span>
                             </div>
 
                             <div>
@@ -118,9 +221,10 @@ export function Register() {
                                 <input type="date"
                                     class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="dobInput"
-                                    onChange={(e) => setDob(e.target.value)}
+                                    onChange={(e) => handleDOB(e.target.value)}
                                     required
                                 />
+                                <span class="block mb-3 text-red-500" visible={dobvalidationMsg !== '' ? true : false}>{dobvalidationMsg}</span>
                             </div>
                         </div>
 
@@ -145,8 +249,9 @@ export function Register() {
                                             <span>The password must contain:</span>
                                             <ul>
                                                 <li>Minimum of 6 characters</li>
-                                                <li>Any special character</li>
-                                                <li>Must have atleast one number</li>
+                                                <li>Atleast one Capital Letter</li>
+                                                <li>Atleast one special character</li>
+                                                <li>Atleast one number</li>
                                             </ul>
                                         </>
                                     }>
@@ -176,7 +281,7 @@ export function Register() {
                                     onChange={(e) => handleConfirmPassword(e.target.value)}
                                     required
                                 />
-                                <span class="block mb-3 text-red-500" visible={confirmPasswordMsg !== '' ? true : false}>{confirmPasswordMsg}</span>
+                                <span class="block mb-3 text-red-500" visible={passwordValidMsg !== '' ? true : false}>{passwordValidMsg}</span>
                             </div>
                         </div>
                     </div>
