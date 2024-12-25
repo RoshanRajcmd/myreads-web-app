@@ -6,7 +6,7 @@ import { AddBook } from './AddBook';
 import { SessionService } from '../api/SessionService';
 import { getUserBooks } from '../api/UserService';
 
-export function BooksList() {
+export function BooksList({ toggleDarkMode }) {
     const [booksData, setBooksData] = useState();
     const [currentPage, setCurrentPage] = useState();
     const addBookModalRef = useRef();
@@ -45,10 +45,10 @@ export function BooksList() {
     return (
         <>
 
-            <div><Header toggleAddBookModal={toggleAddBookModal} noOfBooks={booksData?.content.length} /></div>
+            <div><Header toggleDarkMode={toggleDarkMode} toggleAddBookModal={toggleAddBookModal} noOfBooks={booksData?.content.length} /></div>
 
             <dialog ref={addBookModalRef} class="rounded-3xl">
-                <AddBook toggleAddBookModal={toggleAddBookModal} />
+                <AddBook toggleDarkMode={toggleDarkMode} toggleAddBookModal={toggleAddBookModal} />
             </dialog>
 
             <div class="my-5 mx-52 gap-4" >
