@@ -25,7 +25,7 @@ export function Header({ toggleDarkMode, toggleAddBookModal, noOfBooks }) {
     }
 
     return (
-        <header class="flex justify-between items-center mt-6 p-4 bg-white dark:bg-gray-800">
+        <header class="flex justify-between items-center p-4 bg-white dark:bg-gray-800">
             <p class="flex items-center text-gray-800 dark:text-white">
                 <ImBooks class="mr-1" size="20px" />My Books List: {noOfBooks}
             </p>
@@ -42,7 +42,7 @@ export function Header({ toggleDarkMode, toggleAddBookModal, noOfBooks }) {
 
                 <div class="group relative cursor-pointer">
                     <CgProfile size="33px" />
-                    <span class="absolute top-9 right-0 scale-0 transition-all w-max rounded bg-gray-800 p-2 text-xs font-normal text-white group-hover:scale-100">
+                    <span class="absolute top-9 right-0 scale-0 transition-all w-max rounded p-2 text-xs font-normal group-hover:scale-100 text-white dark:text-gray-800 bg-gray-800 dark:bg-white">
                         <a
                             onClick={redirectToProfileUpdate}
                             class="flex items-center hover:underline p-2">

@@ -11,7 +11,7 @@ export function BooksList({ toggleDarkMode }) {
     const [currentPage, setCurrentPage] = useState();
     const addBookModalRef = useRef();
     const userOnSession = SessionService.getInstance();
-    console.log(userOnSession);
+    //console.log(userOnSession);
 
     //An async function that getALL the books of the given page no each
     //by given size. By defaul the page and size value is 0, 10
@@ -24,7 +24,7 @@ export function BooksList({ toggleDarkMode }) {
                 setBooksData(booksResp.data);
             }
             else toastError("Failed to find Books");
-            console.log(booksResp);
+            //console.log(booksResp);
         }
         catch (error) {
             console.log(error);
@@ -43,7 +43,7 @@ export function BooksList({ toggleDarkMode }) {
 
 
     return (
-        <>
+        <div class="min-h-screen bg-white dark:bg-gray-800">
 
             <div><Header toggleDarkMode={toggleDarkMode} toggleAddBookModal={toggleAddBookModal} noOfBooks={booksData?.content.length} /></div>
 
@@ -53,7 +53,7 @@ export function BooksList({ toggleDarkMode }) {
 
             <div class="my-5 mx-52 gap-4" >
                 {/* The Below line will check the content of booksData of length is 0 means this no data and then it will return the <div> block when its true*/}
-                {booksData?.content?.length === 0 && <div class="flex items-center justify-center text-gray-800 text-4xl">No Books Added</div>}
+                {booksData?.content?.length === 0 && <div class="flex items-center justify-center text-gray-800 dark:text-slate-200 text-4xl">No Books Added</div>}
 
                 {/* Listing all the BookCards */}
                 <ul class="grid grid-cols-auto-fill-280 gap-16">
@@ -83,6 +83,6 @@ export function BooksList({ toggleDarkMode }) {
                     </div>
                 }
             </div>
-        </>
+        </div>
     )
 }
