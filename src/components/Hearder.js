@@ -48,10 +48,10 @@ export function Header({ toggleDarkMode, toggleAddBookModal, noOfBooks }) {
                             class="flex items-center hover:underline p-2">
                             Update Profile
                         </a>
-                        <a
+                        {/* <a
                             class="flex items-center hover:underline p-2">
                             My Friends
-                        </a>
+                        </a> */}
                         <a
                             onClick={endSessionAndLogOut}
                             class="flex items-center hover:underline hover:text-red-500 p-2">

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaBook } from "react-icons/fa";
 import { ImCheckboxUnchecked } from "react-icons/im";
 import { IoIosCheckbox } from "react-icons/io";
-
+import { MdOutlineDeleteForever } from "react-icons/md";
 
 export function BookCard({ book }) {
     const [marked, setMarked] = useState(false);
@@ -21,6 +21,7 @@ export function BookCard({ book }) {
                     {marked && <IoIosCheckbox size="20px" />}
                     {!marked && <ImCheckboxUnchecked />}
                 </div>
+                <MdOutlineDeleteForever className="ml-2 hover:text-red-500 cursor-pointer" size="20px" />
             </div>
             <div class="flex flex-row gap-3 items-center">
                 <p class="font-thin text-sm">{book.publishedOn}</p>
