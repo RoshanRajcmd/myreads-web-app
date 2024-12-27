@@ -76,7 +76,7 @@ export function AddBook({ toggleAddBookModal }) {
                     <input type='text'
                         class="mt-1 mb-6 p-2 w-full border rounded-md focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
                         id="searchInput"
-                        placeholder="Search Books"
+                        placeholder="Search by Title"
                         required
                     />
                     <button type="button" class="focus:outline-none -ml-8">

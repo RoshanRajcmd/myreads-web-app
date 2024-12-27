@@ -332,7 +332,7 @@ export function UpdateUserProfile() {
                     <div class="flex justify-center items-center">
                         <button
                             type="submit"
-                            class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
+                            class="w-full bg-yellow-500 text-white  dark:text-gray-600 font-semibold py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
                             onClick={updateAndRedirectToHome}
                         >Update</button>
                     </div>
@@ -351,12 +351,12 @@ export function UpdateUserProfile() {
                     </button>
                 </div>
 
-                <dialog ref={deleteAccountRef} class="bg-white rounded-lg p-6" >
-                    <span class="font-medium text-gray-600">Deletion of Account will be permanent and CANNOT be reverted back.
+                <dialog ref={deleteAccountRef} class="bg-white dark:bg-gray-600 rounded-lg p-6" >
+                    <span class="font-medium text-gray-600  dark:text-white ">Deletion of Account will be permanent and CANNOT be reverted back.
                         <br /> Your Book contributions will not be deleted
                         <br /> Do you still want to proceed?</span>
 
-                    <div class="space-x-10 mt-4 font-bold">
+                    <div class="space-x-10 mt-4 font-bold font-semibold ">
                         <button class="rounded-md p-4 text-white bg-red-500 hover:bg-red-400"
                             onClick={() => deleteUserAccount()}>Yes</button>
 

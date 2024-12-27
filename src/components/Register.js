@@ -289,7 +289,7 @@ export function Register() {
                     <div class="flex justify-center items-center">
                         <button
                             type="submit"
-                            class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
+                            class="w-full bg-yellow-500 text-white dark:text-gray-600 font-semibold py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
                             onClick={validateAndRedirectToLogin}
                         >Register</button>
                     </div>
