@@ -4,12 +4,27 @@ import { FaBook } from "react-icons/fa";
 import { ImCheckboxUnchecked } from "react-icons/im";
 import { IoIosCheckbox } from "react-icons/io";
 import { MdOutlineDeleteForever } from "react-icons/md";
+import { deleteBookFromUser } from '../api/UserService';
+import { toastError, toastSuccess } from '../api/ToastService';
+import { SessionService } from '../api/SessionService';
 
-export function BookCard({ book }) {
+export function BookCard({ book, onBookAdded }) {
     const [marked, setMarked] = useState(false);
+    const userOnSession = SessionService.getInstance();
+    //console.log(userOnSession);
 
     const handleRead = () => {
         setMarked(!marked);
+    }
+
+    const handleDelete = async () => {
+        const deleteBookResp = await deleteBookFromUser(userOnSession.getSessionUserID(), book.id);
+        if (deleteBookResp !== undefined && deleteBookResp?.status === 200) {
+            toastSuccess("Book Deleted Successfully");
+            onBookAdded();
+        }
+        else
+            toastError("Failed to Delete Book");
     }
 
     return (
@@ -21,7 +36,10 @@ export function BookCard({ book }) {
                     {marked && <IoIosCheckbox />}
                     {!marked && <ImCheckboxUnchecked />}
                 </div>
-                <MdOutlineDeleteForever className="ml-2 hover:text-red-500 cursor-pointer" size="20px" />
+                <MdOutlineDeleteForever
+                    className="ml-2 hover:text-red-500 cursor-pointer" size="20px"
+                    onClick={() => handleDelete()}
+                />
             </div>
             <div class="flex flex-row gap-3 items-center">
                 <p class="font-thin text-sm">{book.publishedOn}</p>

@@ -3,11 +3,16 @@ import { FaSearch } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import { ImCheckboxUnchecked } from "react-icons/im";
 import { IoIosCheckbox } from "react-icons/io";
+import { addBooktoUserByBookObject } from '../api/UserService';
+import { toastError, toastSuccess } from '../api/ToastService';
+import { SessionService } from '../api/SessionService';
 
-export function AddBook({ toggleAddBookModal }) {
+export function AddBook({ toggleAddBookModal, onBookAdded }) {
     const [bookData, setBookData] = useState({ title: '', summary: '', publishedOn: '', author: '' });
     const [errorMsg, setErrorMsg] = useState("");
     const [marked, setMarked] = useState(false);
+    const userSession = SessionService.getInstance();
+    //console.log(userSession);
     const items = [
         { id: 1, name: 'Item 1' },
         { id: 2, name: 'Item 2' },
@@ -38,25 +43,36 @@ export function AddBook({ toggleAddBookModal }) {
     const handleRead = () => {
         setMarked(!marked);
     }
-    const handleAddBook = (event) => {
+
+    const handleAddBook = async (event) => {
         event.preventDefault();
-        if (validateGivenBookDetails()) {
-            //clean the form
-            setErrorMsg("");
+        if (validatePublishedDate()) {
+            console.log(userSession.getSessionUserID());
+            console.log(bookData);
+            var addBookResp = await addBooktoUserByBookObject(userSession.getSessionUserID(), bookData);
+            console.log(addBookResp);
+            if (addBookResp !== undefined && addBookResp?.status === 200) {
+                toastSuccess("Book Added Successfully");
+                cleanForm();
+                onBookAdded(); // Notify parent component to re-render BooksList
+            }
+            else
+                toastError("Failed to Add Book or Book Already Exists");
         }
     }
 
-    function validateGivenBookDetails() {
+    const cleanForm = () => {
+        setBookData({ title: '', summary: '', publishedOn: '', author: '' });
+    }
+
+    function validatePublishedDate() {
         let validation = false;
         let publishDate = new Date(bookData.publishedOn);
-        let currentDate = new Date();
-        //TODO - append validation of existing book details under the same user
-        if (publishDate <= currentDate) {
-            validation = true;
-        }
-        else {
-            setErrorMsg("Please set a valid Date");
-        }
+        let today = new Date();
+        if (today.getDate() > publishDate.getDate())
+            return true;
+        else
+            toastError("Please set a valid Date");
         return validation;
     }
 
@@ -65,8 +81,6 @@ export function AddBook({ toggleAddBookModal }) {
         //event.target.value: This extracts the current value of the input element. So the below line will look like
         setBookData({ ...bookData, [event.target.name]: event.target.value });
     }
-
-
 
     return (
         <div class="flex rounded-lg shadow-md p-10 
@@ -98,7 +112,7 @@ export function AddBook({ toggleAddBookModal }) {
                 </div>
             </div>
 
-            <span class="inline-block w-0.5 bg-gray-600 dark:bg-white mx-2.5 h-auto" />
+            <span class="inline-block w-0.5 bg-gray-200 dark:bg-white mx-2.5 h-auto" />
 
             <div>
                 <div class="flex justify-end items-center cursor-pointer ">
