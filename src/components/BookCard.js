@@ -14,11 +14,11 @@ export function BookCard({ book }) {
 
     return (
         <div class="w-full p-5 mb-2 rounded-3xl min-h-max min-w-80 max-w-80 bg-slate-200 dark:bg-gray-600 text-gray-800 dark:text-slate-200">
-            <div class="flex flex-row items-center flex-wrap gap-1">
+            <div class="flex flex-row items-center gap-1 min-h-5 max-w-80">
                 <FaBook />
                 <p class="text-lg text-center rounded-lg font-semibold p-1 hover:bg-yellow-500">{book.title}</p>
-                <div class="flex justify-end items-center hover:cursor-pointer ml-auto" onClick={() => handleRead()}>
-                    {marked && <IoIosCheckbox size="20px" />}
+                <div class="flex items-center hover:cursor-pointer ml-auto" onClick={() => handleRead()}>
+                    {marked && <IoIosCheckbox />}
                     {!marked && <ImCheckboxUnchecked />}
                 </div>
                 <MdOutlineDeleteForever className="ml-2 hover:text-red-500 cursor-pointer" size="20px" />

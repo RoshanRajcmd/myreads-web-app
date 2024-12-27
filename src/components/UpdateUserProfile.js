@@ -356,7 +356,7 @@ export function UpdateUserProfile() {
                         <br /> Your Book contributions will not be deleted
                         <br /> Do you still want to proceed?</span>
 
-                    <div class="space-x-10 mt-4 font-bold font-semibold ">
+                    <div class="space-x-10 mt-4 font-bold">
                         <button class="rounded-md p-4 text-white bg-red-500 hover:bg-red-400"
                             onClick={() => deleteUserAccount()}>Yes</button>
 

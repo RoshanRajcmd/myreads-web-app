@@ -10,6 +10,9 @@ const UPDATE_USER_DETAILS = 'updateUserDetails';
 const CHECK_USERNAME_EXISTS = 'checkUsernameExists';
 const CHECK_OLD_PASSWORD_VALID = 'checkOldPasswordValid'
 const GET_USER_BOOKS = 'getUserBooks';
+const ADD_BOOK_TO_USER = 'addBookToUser';
+const DELETE_BOOK_FROM_USER = 'deleteBookFromUser';
+const SEARCH_BOOKS = 'searchBooks';
 
 //If a user by that email exist return their ID else returns empty string
 export async function isUserByEmailExist(email) {
@@ -115,6 +118,54 @@ export async function isOldPasswordValid(id, enteredPassword) {
 export async function getUserBooks(id, page, size) {
     try {
         return await axios.get(`${API_URL}/${GET_USER_BOOKS}/${id}/?page=${page}&size=${size}`);
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
+}
+
+export async function addBooktoUserByBookObject(userId, newBook) {
+    try {
+        return await axios.post(`${API_URL}/${ADD_BOOK_TO_USER}/${userId}`, JSON.stringify(newBook), { headers: { 'Content-Type': 'application/json' } });
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
+}
+
+export async function addBookToUserByBookId(userId, newBookId) {
+    try {
+        return await axios.post(`${API_URL}/${ADD_BOOK_TO_USER}/${userId}/${newBookId}`);
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
+}
+
+export async function deleteBookFromUser(userId, bookId) {
+    try {
+        return await axios.delete(`${API_URL}/${DELETE_BOOK_FROM_USER}/${userId}/${bookId}`);
+    }
+    catch (err) {
+        if (!err?.response)
+            console.log("No Server Response");
+        else
+            console.log("Validation API Failed" + err.code + err.message);
+    }
+}
+
+export async function searchBooks(bookTitle) {
+    try {
+        return await axios.get(`${API_URL}/${SEARCH_BOOKS}/${bookTitle}`);
     }
     catch (err) {
         if (!err?.response)
