@@ -1,56 +1,26 @@
 import React, { useState } from 'react';
 import { FaSearch } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
-import { ImCheckboxUnchecked } from "react-icons/im";
-import { IoIosCheckbox } from "react-icons/io";
 import { addBooktoUserByBookObject } from '../api/UserService';
 import { toastError, toastSuccess } from '../api/ToastService';
 import { SessionService } from '../api/SessionService';
+import { searchBooks } from '../api/UserService';
+import { SearchedBook } from './SearchedBook';
 
 export function AddBook({ toggleAddBookModal, onBookAdded }) {
     const [bookData, setBookData] = useState({ title: '', summary: '', publishedOn: '', author: '' });
     const [errorMsg, setErrorMsg] = useState("");
-    const [marked, setMarked] = useState(false);
-    const userSession = SessionService.getInstance();
-    //console.log(userSession);
-    const items = [
-        { id: 1, name: 'Item 1' },
-        { id: 2, name: 'Item 2' },
-        { id: 3, name: 'Item 2' },
-        { id: 4, name: 'Item 2' },
-        { id: 5, name: 'Item 2' },
-        { id: 6, name: 'Item 2' },
-        { id: 7, name: 'Item 2' },
-        { id: 8, name: 'Item 2' },
-        { id: 9, name: 'Item 2' },
-        { id: 10, name: 'Item 2' },
-        { id: 1, name: 'Item 1' },
-        { id: 2, name: 'Item 2' },
-        { id: 3, name: 'Item 2' },
-        { id: 4, name: 'Item 2' },
-        { id: 5, name: 'Item 2' },
-        { id: 6, name: 'Item 2' },
-        { id: 7, name: 'Item 2' },
-        { id: 8, name: 'Item 2' },
-        { id: 9, name: 'Item 2' },
-        { id: 10, name: 'Item 2' },
-        { id: 7, name: 'Item 2' },
-        { id: 8, name: 'Item 2' },
-        { id: 9, name: 'Item 2' },
-        { id: 10, name: 'Item 2' },
-    ];
+    const userOnSession = SessionService.getInstance();
+    //console.log(userOnSession);
+    const [searchResults, setSearchResults] = useState([]);
 
-    const handleRead = () => {
-        setMarked(!marked);
-    }
+
 
     const handleAddBook = async (event) => {
         event.preventDefault();
         if (validatePublishedDate()) {
-            console.log(userSession.getSessionUserID());
-            console.log(bookData);
-            var addBookResp = await addBooktoUserByBookObject(userSession.getSessionUserID(), bookData);
-            console.log(addBookResp);
+            var addBookResp = await addBooktoUserByBookObject(userOnSession.getSessionUserID(), bookData);
+            //console.log(addBookResp);
             if (addBookResp !== undefined && addBookResp?.status === 200) {
                 toastSuccess("Book Added Successfully");
                 cleanForm();
@@ -82,6 +52,18 @@ export function AddBook({ toggleAddBookModal, onBookAdded }) {
         setBookData({ ...bookData, [event.target.name]: event.target.value });
     }
 
+    const handleBookSearch = async (enteredBookTitle) => {
+        if (enteredBookTitle !== undefined && enteredBookTitle !== "") {
+            const searchResp = await searchBooks(enteredBookTitle);
+            if (searchResp !== undefined && searchResp?.status === 200) {
+                setSearchResults(searchResp.data);
+                //console.log(searchResp.data);
+            }
+            else
+                toastError("Failed to Search");
+        }
+    }
+
     return (
         <div class="flex rounded-lg shadow-md p-10 
         transition-transform text-center bg-white dark:bg-gray-600 text-gray-800 dark:text-slate-200 gap-5">
@@ -92,6 +74,7 @@ export function AddBook({ toggleAddBookModal, onBookAdded }) {
                         id="searchInput"
                         placeholder="Search by Title"
                         required
+                        onChange={(e) => handleBookSearch(e.target.value)}
                     />
                     <button type="button" class="focus:outline-none -ml-8">
                         <FaSearch />
@@ -99,16 +82,9 @@ export function AddBook({ toggleAddBookModal, onBookAdded }) {
                 </div>
 
                 <div className="max-h-96 overflow-auto">
-                    <ul>
-                        {items.map(item => (
-                            <li className="flex items-center gap-2" key={item.id}>
-                                <div class="flex items-center hover:cursor-pointer" onClick={() => handleRead()}>
-                                    {marked && <IoIosCheckbox size="18px" />}
-                                    {!marked && <ImCheckboxUnchecked />}
-                                </div>
-                                {item.name}</li>
-                        ))}
-                    </ul>
+                    {searchResults.map(resBook => (
+                        <SearchedBook book={resBook} key={resBook.id} onBookAdded={onBookAdded} />
+                    ))}
                 </div>
             </div>
 
