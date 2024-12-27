@@ -14,8 +14,6 @@ export function AddBook({ toggleAddBookModal, onBookAdded }) {
     //console.log(userOnSession);
     const [searchResults, setSearchResults] = useState([]);
 
-
-
     const handleAddBook = async (event) => {
         event.preventDefault();
         if (validatePublishedDate()) {
@@ -39,7 +37,7 @@ export function AddBook({ toggleAddBookModal, onBookAdded }) {
         let validation = false;
         let publishDate = new Date(bookData.publishedOn);
         let today = new Date();
-        if (today.getDate() > publishDate.getDate())
+        if (today.getDate() > publishDate.getDate() || today.getMonth() > publishDate.getMonth() || today.getFullYear() > publishDate.getFullYear())
             return true;
         else
             toastError("Please set a valid Date");
