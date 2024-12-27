@@ -19,7 +19,6 @@ export function BooksList({ toggleDarkMode }) {
     const getAllBooks = async (page = 0, size = 10) => {
         try {
             setCurrentPage(page);
-            //TODO - Implement the below line when doing CRUD functions of Books
             const booksResp = await getUserBooks(userOnSession.getSessionUserID(), page, size);
             if (booksResp?.data?.content !== undefined) {
                 setBooksData(booksResp.data);

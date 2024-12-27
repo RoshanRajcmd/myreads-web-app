@@ -17,7 +17,7 @@ export function BookCard({ book, onBookAdded }) {
         setMarked(!marked);
     }
 
-    const handleDelete = async () => {
+    const handleRemoveBook = async () => {
         const deleteBookResp = await deleteBookFromUser(userOnSession.getSessionUserID(), book.id);
         if (deleteBookResp !== undefined && deleteBookResp?.status === 200) {
             toastSuccess("Book Deleted Successfully");
@@ -38,7 +38,7 @@ export function BookCard({ book, onBookAdded }) {
                 </div>
                 <MdOutlineDeleteForever
                     className="ml-2 hover:text-red-500 cursor-pointer" size="20px"
-                    onClick={() => handleDelete()}
+                    onClick={() => handleRemoveBook()}
                 />
             </div>
             <div class="flex flex-row gap-3 items-center">
