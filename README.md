@@ -19,6 +19,8 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 4. Existing Email ID and Username validation
 5. Password Mismatch validation on new password
 6. CRUD functionality on both Users and Books
+7. Search and Add Books
+8. Dark and Light Theme
 
 ## Development server
 
