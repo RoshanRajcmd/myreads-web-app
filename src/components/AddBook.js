@@ -1,28 +1,46 @@
 import React, { useState } from 'react';
+import { FaSearch } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
+import { addBooktoUserByBookObject } from '../api/UserService';
+import { toastError, toastSuccess } from '../api/ToastService';
+import { SessionService } from '../api/SessionService';
+import { searchBooks, isBookExistUnderUser } from '../api/UserService';
+import { SearchedBook } from './SearchedBook';
 
-export function AddBook({ toggleAddBookModal }) {
+export function AddBook({ toggleAddBookModal, onBookAdded }) {
     const [bookData, setBookData] = useState({ title: '', summary: '', publishedOn: '', author: '' });
     const [errorMsg, setErrorMsg] = useState("");
+    const userOnSession = SessionService.getInstance();
+    //console.log(userOnSession);
+    const [searchResults, setSearchResults] = useState([]);
 
-    const handleAddBook = (event) => {
+    const handleAddBook = async (event) => {
         event.preventDefault();
-        if (validateGivenBookDetails()) {
-            //clean the form
-            setErrorMsg("");
+        if (validatePublishedDate()) {
+            var addBookResp = await addBooktoUserByBookObject(userOnSession.getSessionUserID(), bookData);
+            //console.log(addBookResp);
+            if (addBookResp !== undefined && addBookResp?.status === 200) {
+                toastSuccess("Book Added Successfully");
+                cleanForm();
+                onBookAdded(); // Notify parent component to re-render BooksList
+            }
+            else
+                toastError("Failed to Add Book or Book Already Exists");
         }
     }
 
-    function validateGivenBookDetails() {
+    const cleanForm = () => {
+        setBookData({ title: '', summary: '', publishedOn: '', author: '' });
+    }
+
+    function validatePublishedDate() {
         let validation = false;
         let publishDate = new Date(bookData.publishedOn);
-        let currentDate = new Date();
-        //TODO - append validation of existing book details under the same user
-        if (publishDate <= currentDate) {
-            validation = true;
-        }
-        else {
-            setErrorMsg("Please set a valid Date");
-        }
+        let today = new Date();
+        if (today.getDate() > publishDate.getDate() || today.getMonth() > publishDate.getMonth() || today.getFullYear() > publishDate.getFullYear())
+            return true;
+        else
+            toastError("Please set a valid Date");
         return validation;
     }
 
@@ -32,60 +50,99 @@ export function AddBook({ toggleAddBookModal }) {
         setBookData({ ...bookData, [event.target.name]: event.target.value });
     }
 
+    const handleBookSearch = async (enteredBookTitle) => {
+        if (enteredBookTitle !== undefined && enteredBookTitle !== "") {
+            const searchResp = await searchBooks(enteredBookTitle);
+            if (searchResp !== undefined && searchResp?.status === 200) {
+                setSearchResults(searchResp.data);
+                //console.log(searchResp.data);
+            }
+            else
+                toastError("Failed to Search");
+        }
+    }
 
+    const checkBookIsAlreadyAdded = async (resBook) => {
+        const isExistsResp = await isBookExistUnderUser(userOnSession.getSessionUserID(), resBook.id);
+        console.log(isExistsResp);
+        return isExistsResp.data;
+    }
 
     return (
-        <div class="bg-white rounded-lg shadow-md p-10 
-        transition-transform text-center">
-            <h1 class="text-yellow-500 text-3xl">
-                Add a Book
-            </h1>
-            <h3 class="text-lg">
-                Interested in a new Read?
-            </h3>
-            <h2>Add a book in your Library</h2>
-            <span visible={errorMsg !== ""} style={{ color: 'red' }}>{errorMsg}</span>
-            <form onSubmit={handleAddBook}>
-                < lable class="block mt-2 mb-2 text-left text-gray-700 font-bold"> Book Title: </lable >
-                <input
-                    type="text"
-                    name="title"
-                    value={bookData.title}
-                    onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400"
-                    required />
-                <lable class="block mb-2 text-left text-gray-700 font-bold">Book Summary: </lable>
-                <input
-                    type="text"
-                    name="summary"
-                    value={bookData.summary}
-                    onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400" />
-                <lable class="block mb-2 text-left text-gray-700 font-bold">Published Date: </lable>
-                <input
-                    type="date"
-                    name="publishedOn"
-                    value={bookData.publishedOn}
-                    onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400"
-                    required />
-                <lable class="block mb-2 text-left text-gray-700 font-bold">Book Author: </lable>
-                <input
-                    type="text"
-                    name="author"
-                    value={bookData.author}
-                    onChange={handleBookDataInput}
-                    class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400"
-                    required />
-                <button class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400">Add Book</button>
-            </form >
+        <div class="flex rounded-lg shadow-md p-10 
+        transition-transform text-center bg-white dark:bg-gray-600 text-gray-800 dark:text-slate-200 gap-5">
+            <div>
+                <div>
+                    <input type='text'
+                        class="mt-1 mb-6 p-2 w-full border rounded-md focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
+                        id="searchInput"
+                        placeholder="Search by Title"
+                        required
+                        onChange={(e) => handleBookSearch(e.target.value)}
+                    />
+                    <button type="button" class="focus:outline-none -ml-8">
+                        <FaSearch />
+                    </button>
+                </div>
 
-            {/* Add a Clear Button */}
-            <button
-                onClick={() => toggleAddBookModal(false)}
-                class="text-blue-500 hover:underline mt-5">
-                Close
-            </button>
+                <div className="max-h-96 overflow-auto">
+                    {searchResults.map(resBook => (
+                        <SearchedBook book={resBook} key={resBook.id} onBookAdded={onBookAdded} isExists={checkBookIsAlreadyAdded(resBook)} />
+                    ))}
+                </div>
+            </div>
+
+            <span class="inline-block w-0.5 bg-gray-200 dark:bg-white mx-2.5 h-auto" />
+
+            <div>
+                <div class="flex justify-end items-center cursor-pointer ">
+                    <GiCancel
+                        onClick={() => toggleAddBookModal(false)}
+                        size="20px" />
+                </div>
+                <h1 class="text-yellow-500 text-3xl">
+                    Add a Book
+                </h1>
+                <h3 class="text-lg">
+                    Interested in a new Read?
+                </h3>
+                <h2>Add a book in your Library</h2>
+                <span visible={errorMsg !== ""} style={{ color: 'red' }}>{errorMsg}</span>
+                <form onSubmit={handleAddBook}>
+                    < lable class="block mt-2 mb-2 text-left font-bold"> Book Title: </lable >
+                    <input
+                        type="text"
+                        name="title"
+                        value={bookData.title}
+                        onChange={handleBookDataInput}
+                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
+                        required />
+                    <lable class="block mb-2 text-left font-bold">Book Summary: </lable>
+                    <input
+                        type="text"
+                        name="summary"
+                        value={bookData.summary}
+                        onChange={handleBookDataInput}
+                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600" />
+                    <lable class="block mb-2 text-left font-bold">Published Date: </lable>
+                    <input
+                        type="date"
+                        name="publishedOn"
+                        value={bookData.publishedOn}
+                        onChange={handleBookDataInput}
+                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
+                        required />
+                    <lable class="block mb-2 text-left font-bold">Book Author: </lable>
+                    <input
+                        type="text"
+                        name="author"
+                        value={bookData.author}
+                        onChange={handleBookDataInput}
+                        class="mt-1 p-2 w-full border rounded-md pr-10 mb-6 px-4 py-2 focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
+                        required />
+                    <button class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400">Add Book</button>
+                </form >
+            </div>
         </div>
     )
 }

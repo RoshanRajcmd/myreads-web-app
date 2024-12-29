@@ -183,8 +183,8 @@ export function UpdateUserProfile() {
 
     return (
         <div class="flex items-center justify-center
-              min-h-screen bg-gray-200">
-            <div class="main bg-white rounded-2xl shadow-md p-10 
+              min-h-screen bg-slate-200 dark:bg-gray-800 text-gray-800 dark:text-slate-200">
+            <div class="main bg-white dark:bg-gray-600 rounded-2xl shadow-md p-10 
         transition-transform w-auto text-center">
                 <div class="flex justify-end items-center cursor-pointer ">
                     <GiCancel
@@ -198,9 +198,9 @@ export function UpdateUserProfile() {
                     <div class="flex gap-5 justify-between">
                         <div>
                             <div>
-                                <label for="nameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Full Name:</label>
+                                <label for="nameInput" class="block mt-4 mb-2 text-left font-bold">Full Name:</label>
                                 <input type="text"
-                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 bg-white dark:bg-gray-600 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="nameInput"
                                     placeholder='Enter Full Name'
                                     onChange={(e) => handleFullName(e.target.value)}
@@ -210,7 +210,7 @@ export function UpdateUserProfile() {
                             </div>
 
                             <div>
-                                <label for="userNameInput" class="flex items-center mt-4 mb-2 text-left text-gray-700 font-bold">
+                                <label for="userNameInput" class="flex items-center mt-4 mb-2 text-left font-bold">
                                     Username:
                                     <Tooltip message={
                                         <>
@@ -227,7 +227,7 @@ export function UpdateUserProfile() {
                                     </Tooltip>
                                 </label>
                                 <input type="text"
-                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 bg-white-200 dark:bg-gray-600 rounded-md focus:outline-none focus:border-yellow-400"
                                     id="userNameInput"
                                     placeholder='Enter Username'
                                     onChange={(e) => handleUserName(e.target.value)}
@@ -240,8 +240,8 @@ export function UpdateUserProfile() {
 
                         <div>
                             <div>
-                                <span class="flex text-left text-gray-700 font-bold mt-4">Change Password</span>
-                                <label for="oldPasswordInputRef" class="flex items-center mb-2 text-left text-gray-700 font-bold gap-1">
+                                <span class="flex text-left  font-bold mt-4">Change Password</span>
+                                <label for="oldPasswordInputRef" class="flex items-center mb-2 text-left  font-bold gap-1">
                                     Old Password:
                                     <Tooltip message={
                                         <>
@@ -259,7 +259,7 @@ export function UpdateUserProfile() {
                                 </label>
                                 <div>
                                     <input type={oldPassword.showPassword ? 'text' : 'password'}
-                                        class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+                                        class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 bg-white-200 dark:bg-gray-600 rounded-md focus:outline-none"
                                         id="oldPasswordInputRef"
                                         ref={oldPasswordInputRef}
                                         placeholder="Enter Old Password"
@@ -278,7 +278,7 @@ export function UpdateUserProfile() {
                                     pointerEvents: oldPassword.value === "" ? 'none' : 'auto',
                                     opacity: oldPassword.value === "" ? 0.5 : 1
                                 }}>
-                                <label for="newPasswordInputRef" class="flex items-center mb-2 text-left text-gray-700 font-bold gap-1">
+                                <label for="newPasswordInputRef" class="flex items-center mb-2 text-left  font-bold gap-1">
                                     New Password:
                                     <Tooltip message={
                                         <>
@@ -296,7 +296,7 @@ export function UpdateUserProfile() {
                                 </label>
                                 <div>
                                     <input type={newPassword.showPassword ? 'text' : 'password'}
-                                        class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+                                        class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 bg-white-200 dark:bg-gray-600 rounded-md focus:outline-none"
                                         id="newPasswordInputRef"
                                         ref={newPasswordInputRef}
                                         placeholder="Enter New Password"
@@ -315,9 +315,9 @@ export function UpdateUserProfile() {
                                     pointerEvents: newPassword.value === "" ? 'none' : 'auto',
                                     opacity: newPassword.value === "" ? 0.5 : 1
                                 }}>
-                                <label for="confirmPasswordInput" class="block mb-2 text-left text-gray-700 font-bold">Confirm New Password:</label>
+                                <label for="confirmPasswordInput" class="block mb-2 text-left font-bold">Confirm New Password:</label>
                                 <input type={newPassword.showPassword ? 'text' : 'password'}
-                                    class="w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+                                    class="w-full mb-6 px-4 py-2 border border-gray-300 bg-white-200 dark:bg-gray-600 rounded-md focus:outline-none"
                                     id="confirmPasswordInput"
                                     placeholder="Re-enter Password"
                                     onChange={(e) => handleConfirmPassword(e.target.value)}
@@ -332,7 +332,7 @@ export function UpdateUserProfile() {
                     <div class="flex justify-center items-center">
                         <button
                             type="submit"
-                            class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
+                            class="w-full bg-yellow-500 text-white  dark:text-gray-600 font-semibold py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
                             onClick={updateAndRedirectToHome}
                         >Update</button>
                     </div>
@@ -351,8 +351,8 @@ export function UpdateUserProfile() {
                     </button>
                 </div>
 
-                <dialog ref={deleteAccountRef} class="bg-white rounded-lg p-6" >
-                    <span class="font-medium text-gray-600">Deletion of Account will be permanent and CANNOT be reverted back.
+                <dialog ref={deleteAccountRef} class="bg-white dark:bg-gray-600 rounded-lg p-6" >
+                    <span class="font-medium text-gray-600  dark:text-white ">Deletion of Account will be permanent and CANNOT be reverted back.
                         <br /> Your Book contributions will not be deleted
                         <br /> Do you still want to proceed?</span>
 

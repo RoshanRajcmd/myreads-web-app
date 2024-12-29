@@ -168,8 +168,8 @@ export function Register() {
 
     return (
         <div class="flex items-center justify-center
-              min-h-screen bg-gray-200">
-            <div class="main bg-white rounded-2xl shadow-md p-10 
+              min-h-screen bg-slate-200 dark:bg-gray-800 text-gray-800 dark:text-slate-200">
+            <div class="main bg-white dark:bg-gray-600 rounded-2xl shadow-md p-10 
         transition-transform w-auto text-center">
                 <p class="text-yellow-500 text-3xl font-semibold">MyReads</p>
 
@@ -179,9 +179,9 @@ export function Register() {
                     <div class="flex gap-5">
                         <div>
                             <div>
-                                <label for="nameInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Full Name:</label>
+                                <label for="nameInput" class="block mt-4 mb-2 text-left  font-bold">Full Name:</label>
                                 <input type="text"
-                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
                                     id="nameInput"
                                     placeholder='Enter Full Name'
                                     onChange={(e) => handleFullName(e.target.value)}
@@ -190,7 +190,7 @@ export function Register() {
                             </div>
 
                             <div>
-                                <label for="userNameInput" class="flex items-center mt-4 mb-2 text-left text-gray-700 font-bold">
+                                <label for="userNameInput" class="flex items-center mt-4 mb-2 text-left font-bold">
                                     Username:
                                     <Tooltip message={
                                         <>
@@ -207,7 +207,7 @@ export function Register() {
                                     </Tooltip>
                                 </label>
                                 <input type="text"
-                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
                                     id="userNameInput"
                                     placeholder='Enter Username'
                                     onChange={(e) => handleUserName(e.target.value)}
@@ -217,9 +217,9 @@ export function Register() {
                             </div>
 
                             <div>
-                                <label for="dobInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Date of Birth:</label>
+                                <label for="dobInput" class="block mt-4 mb-2 text-left font-bold">Date of Birth:</label>
                                 <input type="date"
-                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
                                     id="dobInput"
                                     onChange={(e) => handleDOB(e.target.value)}
                                     required
@@ -230,9 +230,9 @@ export function Register() {
 
                         <div>
                             <div>
-                                <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Email:</label>
+                                <label for="emailInput" class="block mt-4 mb-2 text-left font-bold">Email:</label>
                                 <input type="text"
-                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                                    class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
                                     id="emailInput"
                                     placeholder="Enter your Email"
                                     onChange={(e) => handleEmail(e.target.value)}
@@ -242,7 +242,7 @@ export function Register() {
                             </div>
 
                             <div>
-                                <label for="passwordInput" class="flex items-center mt-4 mb-2 text-left text-gray-700 font-bold gap-1">
+                                <label for="passwordInput" class="flex items-center mt-4 mb-2 text-left font-bold gap-1">
                                     Password:
                                     <Tooltip message={
                                         <>
@@ -260,7 +260,7 @@ export function Register() {
                                 </label>
                                 <div>
                                     <input type={password.showPassword ? 'text' : 'password'}
-                                        class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+                                        class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none bg-white dark:bg-gray-600"
                                         id="passwordInput"
                                         placeholder="Enter your Password"
                                         onChange={(e) => handlePassword(e.target.value)}
@@ -273,9 +273,9 @@ export function Register() {
                             </div>
 
                             <div>
-                                <label for="confirmPasswordInput" class="block mb-2 text-left text-gray-700 font-bold">Confirm Password:</label>
+                                <label for="confirmPasswordInput" class="block mb-2 text-left font-bold">Confirm Password:</label>
                                 <input type={password.showPassword ? 'text' : 'password'}
-                                    class="w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+                                    class="w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none bg-white dark:bg-gray-600"
                                     id="confirmPasswordInput"
                                     placeholder="Re-enter Password"
                                     onChange={(e) => handleConfirmPassword(e.target.value)}
@@ -289,7 +289,7 @@ export function Register() {
                     <div class="flex justify-center items-center">
                         <button
                             type="submit"
-                            class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
+                            class="w-full bg-yellow-500 text-white dark:text-gray-600 font-semibold py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
                             onClick={validateAndRedirectToLogin}
                         >Register</button>
                     </div>

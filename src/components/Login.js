@@ -79,8 +79,8 @@ export function Login() {
 
     return (
         <div class="flex items-center justify-center
-              min-h-screen bg-gray-200">
-            <div class="main bg-white rounded-2xl shadow-md p-10 
+              min-h-screen bg-slate-200 dark:bg-gray-800 text-gray-800 dark:text-slate-200">
+            <div class="main bg-white dark:bg-gray-600 rounded-2xl shadow-md p-10 
     transition-transform w-96 text-center">
                 <p class="text-yellow-500 text-3xl font-semibold">MyReads</p>
 
@@ -88,10 +88,10 @@ export function Login() {
 
                 <form>
                     <div>
-                        <label for="emailInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Email:</label>
+                        <label for="emailInput" class="block mt-4 mb-2 text-left font-bold">Email:</label>
 
                         <input type="text"
-                            class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400"
+                            class="block w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-yellow-400 bg-white dark:bg-gray-600"
                             id="emailInput"
                             placeholder="Enter your Email"
                             onChange={(e) => handleEmail(e.target.value)}
@@ -102,10 +102,10 @@ export function Login() {
                     </div>
 
                     <div>
-                        <label for="passwordInput" class="block mt-4 mb-2 text-left text-gray-700 font-bold">Password:</label>
+                        <label for="passwordInput" class="block mt-4 mb-2 text-left font-bold">Password:</label>
                         <div>
                             <input type={password.showPassword ? 'text' : 'password'}
-                                class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+                                class="w-full -ml-4 mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none bg-white dark:bg-gray-600"
                                 id="passwordInput"
                                 placeholder="Enter your Password"
                                 onChange={(e) => handlePassword(e.target.value)}
@@ -120,7 +120,7 @@ export function Login() {
                     <div class="flex justify-center items-center">
                         <button
                             type="submit"
-                            class="w-full bg-yellow-500 text-white py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
+                            class="w-full bg-yellow-500 text-white dark:text-gray-600 font-semibold py-3 px-6 rounded-md cursor-pointer transition-colors duration-300 hover:bg-yellow-400"
                             onClick={validateAndRedirectToHome}
                         >Submit</button>
                     </div>

@@ -23,7 +23,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div class="bg-white dark:bg-gray-800">
       <Router>
         <Routes>
 
