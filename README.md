@@ -33,6 +33,7 @@ Run `npm start` for a dev server. Navigate to `http://localhost:3000/` in a brow
 Run `Application class` with any of your Java IDE. Navigate to `http://localhost:8080/` in a browser. You need to Manually restart the server if you change any of the source files.
 
 ## Login and Register
+
 ![Screenshot 2024-12-21 at 12 25 49 AM](https://github.com/user-attachments/assets/b72eb5a6-a870-4968-b663-fce4321e5a31)
 ![Screenshot 2024-12-21 at 12 26 25 AM](https://github.com/user-attachments/assets/34787380-fcc2-4ec1-9f8a-21c5bddcd7c3)
 ![Screenshot 2024-12-26 at 2 49 21 AM](https://github.com/user-attachments/assets/6b4b24e9-dd1c-478f-81ac-0079e2208edf)
