@@ -13,7 +13,7 @@ const GET_USER_BOOKS = 'getUserBooks';
 const ADD_BOOK_TO_USER = 'addBookToUser';
 const DELETE_BOOK_FROM_USER = 'deleteBookFromUser';
 const SEARCH_BOOKS = 'searchBooks';
-const GET_ALL_BOOKS_UNDER_USER = 'getAllBooksUnderUser';
+const IS_BOOKS_UNDER_USER = 'isBookExistUnderUser';
 
 //If a user by that email exist return their ID else returns empty string
 export async function isUserByEmailExist(email) {
@@ -176,9 +176,9 @@ export async function searchBooks(bookTitle) {
     }
 }
 
-export async function getAllBooksUnderUser(userId) {
+export async function isBookExistUnderUser(userId, bookId) {
     try {
-        return await axios.get(`${API_URL}/${GET_ALL_BOOKS_UNDER_USER}/${userId}`);
+        return await axios.get(`${API_URL}/${IS_BOOKS_UNDER_USER}/${userId}/${bookId}`);
     }
     catch (err) {
         if (!err?.response)

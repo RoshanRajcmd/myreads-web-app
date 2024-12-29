@@ -5,10 +5,11 @@ import { SessionService } from '../api/SessionService';
 import { toastError, toastSuccess } from '../api/ToastService';
 import { addBookToUserByBookId, deleteBookFromUser } from '../api/UserService';
 
-export function SearchedBook({ book, onBookAdded }) {
+export function SearchedBook({ book, onBookAdded, isExists }) {
     const [marked, setMarked] = useState(false);
     const userOnSession = SessionService.getInstance();
     //console.log(userOnSession);
+    console.log(isExists);
 
     const handleRead = async () => {
         console.log(marked);

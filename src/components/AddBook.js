@@ -4,7 +4,7 @@ import { GiCancel } from "react-icons/gi";
 import { addBooktoUserByBookObject } from '../api/UserService';
 import { toastError, toastSuccess } from '../api/ToastService';
 import { SessionService } from '../api/SessionService';
-import { searchBooks } from '../api/UserService';
+import { searchBooks, isBookExistUnderUser } from '../api/UserService';
 import { SearchedBook } from './SearchedBook';
 
 export function AddBook({ toggleAddBookModal, onBookAdded }) {
@@ -62,6 +62,12 @@ export function AddBook({ toggleAddBookModal, onBookAdded }) {
         }
     }
 
+    const checkBookIsAlreadyAdded = async (resBook) => {
+        const isExistsResp = await isBookExistUnderUser(userOnSession.getSessionUserID(), resBook.id);
+        console.log(isExistsResp);
+        return isExistsResp.data;
+    }
+
     return (
         <div class="flex rounded-lg shadow-md p-10 
         transition-transform text-center bg-white dark:bg-gray-600 text-gray-800 dark:text-slate-200 gap-5">
@@ -81,7 +87,7 @@ export function AddBook({ toggleAddBookModal, onBookAdded }) {
 
                 <div className="max-h-96 overflow-auto">
                     {searchResults.map(resBook => (
-                        <SearchedBook book={resBook} key={resBook.id} onBookAdded={onBookAdded} />
+                        <SearchedBook book={resBook} key={resBook.id} onBookAdded={onBookAdded} isExists={checkBookIsAlreadyAdded(resBook)} />
                     ))}
                 </div>
             </div>
