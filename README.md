@@ -9,7 +9,9 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 * React Icons
 * Toastify
 * MySQL
-* Spring Boot with Hibernate and Spring Security
+* Spring Boot
+  * Hibernate with Apache Jakarta Tomcat Server
+  * Spring Security
 
 ## Features
 
