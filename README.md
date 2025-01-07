@@ -2,6 +2,12 @@
 
 A Web Application to Track Your Book Reading Progress. Search and Add the books you wish to read in your very own list maintained under your email account.
 
+## Source Code
+
+FrontEnd: [myreads-web-app](https://github.com/RoshanRajcmd/myreads-web-app)
+
+BackEnd: [todo-app-backend](https://github.com/RoshanRajcmd/myreads-backend)
+
 ## Tech Stack and Packages
 
 * React.js 
@@ -24,7 +30,7 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 7. Search and Add Books
 8. Dark and Light Theme
 
-## Development server
+## Developer setup
 
 *For Client* 
 
@@ -33,6 +39,10 @@ Run `npm start` for a dev server. Navigate to `http://localhost:3000/` in a brow
 *For Server* 
 
 Run `Application class` with any of your Java IDE. Navigate to `http://localhost:8080/` in a browser. You need to Manually restart the server if you change any of the source files.
+
+*For DB*
+
+Setup a Local MySQL server at port `localhost:3306/` and create a database named `myreads`.
 
 ## Login and Register
 
