@@ -2,13 +2,11 @@
 
 A Web Application to Track Your Book Reading Progress. Search and Add the books you wish to read in your very own list maintained under your email account.
 
-## Source Code
+## ⚙️ Source Code
 
-FrontEnd: [myreads-web-app](https://github.com/RoshanRajcmd/myreads-web-app)
+[myreads-web-app](https://github.com/RoshanRajcmd/myreads-web-app)
 
-BackEnd: [todo-app-backend](https://github.com/RoshanRajcmd/myreads-backend)
-
-## Tech Stack and Packages
+## 📚 Tech Stack and Packages
 
 * React.js 
 * Tailwind
@@ -19,7 +17,7 @@ BackEnd: [todo-app-backend](https://github.com/RoshanRajcmd/myreads-backend)
   * Hibernate
   * Apache Jakarta Tomcat Server
 
-## Features
+## 🎛️ Features
 
 1. User session handling throughout the website
 2. User Credential Validation
@@ -30,7 +28,11 @@ BackEnd: [todo-app-backend](https://github.com/RoshanRajcmd/myreads-backend)
 7. Search and Add Books
 8. Dark and Light Theme
 
-## Developer setup
+## 🧑‍💻 Developer setup
+
+### 🐳 With Docker
+
+### 🎣 Without Docker
 
 *For Client* 
 
@@ -44,7 +46,7 @@ Run `Application class` with any of your Java IDE. Navigate to `http://localhost
 
 Setup a Local MySQL server at port `localhost:3306/` and create a database named `myreads`.
 
-## Login and Register
+## 📸 Screenshots
 
 ![Screenshot 2024-12-21 at 12 25 49 AM](https://github.com/user-attachments/assets/b72eb5a6-a870-4968-b663-fce4321e5a31)
 ![Screenshot 2024-12-21 at 12 26 25 AM](https://github.com/user-attachments/assets/34787380-fcc2-4ec1-9f8a-21c5bddcd7c3)
