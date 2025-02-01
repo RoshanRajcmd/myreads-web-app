@@ -1,0 +1,15 @@
+# Dependency directories
+jspm_packages/
+
+# Optional eslint cache
+.eslintcache
+
+# Mac system files
+.DS_Store
+
+# Docker files
+Dockerfile
+
+# Git files
+.git
+.gitignore

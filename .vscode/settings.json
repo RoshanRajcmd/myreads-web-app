@@ -9,7 +9,7 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "Myreads DB",
+            "name": "myreadsdb",
             "database": "myreads",
             "username": "root",
             "password": "4fn4@96K"
