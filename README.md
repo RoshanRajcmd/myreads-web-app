@@ -32,7 +32,7 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 
 ### 🐳 With Docker
 
-Run `docker compose -f 'docker-compose.yml' up -d --build`. Navigate to `http://localhost:80/` in a browser.
+Run `docker compose -f 'docker-compose.yml' up -d --build`. Navigate to `http://localhost:3000/myreads/login` in a browser.
 
 ### 🎣 Without Docker
 
@@ -40,7 +40,7 @@ Run `docker compose -f 'docker-compose.yml' up -d --build`. Navigate to `http://
 
 Run `cd client`.
 
-Run `npm start` for a dev server. Navigate to `http://localhost:3000/` in a browser. The app will automatically reload if you change any of the source files.
+Run `npm start` for a dev server. Navigate to `http://localhost:3000/myreads/login` in a browser. The app will automatically reload if you change any of the source files.
 
 *For Server* 
 
