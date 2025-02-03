@@ -32,13 +32,19 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 
 ### 🐳 With Docker
 
+Run `docker compose -f 'docker-compose.yml' up -d --build`. Navigate to `http://localhost:80/` in a browser.
+
 ### 🎣 Without Docker
 
 *For Client* 
 
+Run `cd client`.
+
 Run `npm start` for a dev server. Navigate to `http://localhost:3000/` in a browser. The app will automatically reload if you change any of the source files.
 
 *For Server* 
+
+Run `cd server`.
 
 Run `Application class` with any of your Java IDE. Navigate to `http://localhost:8080/` in a browser. You need to Manually restart the server if you change any of the source files.
 
