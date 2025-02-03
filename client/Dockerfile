@@ -23,7 +23,7 @@ COPY --from=build /myreads-client-app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80 to allow external access to the Nginx server
-EXPOSE 80/tcp
+EXPOSE 80
 
 # Run Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
