@@ -14,8 +14,9 @@ RUN ./mvnw dependency:go-offline
 # Copy the rest of the source code
 COPY src ./src
 
-# Run the application
-CMD ["./mvnw", "spring-boot:run"]
+# Expose port 8080 (default for Spring Boot) and 5005 for remote debugging
+EXPOSE 8080 5005
 
-# Expose port 3306 (default for Spring Boot)
-EXPOSE 3306
+# Run the application
+CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
+

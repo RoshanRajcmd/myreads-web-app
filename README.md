@@ -32,7 +32,8 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 
 ### 🐳 With Docker
 
-Run `docker compose -f 'docker-compose.yml' up -d --build`. Navigate to `http://localhost:3000/myreads/login` in a browser.
+Run `docker compose -f 'docker-compose.yml' up -d --build`. Navigate to `http://localhost:3000/myreads/login` in a browser to view the client.
+Navigate to `http://localhost:8080/` to access server side. The MySQL DB will be running on port `3306`.
 
 ### 🎣 Without Docker
 
