@@ -1,7 +1,9 @@
 import axios from "axios";
 
-// myreads-server:8080 is the docker container name for the server
 const API_URL = 'http://localhost:8080/myreads/api/v1/user';
+// Replace API_URL in case you are not running the app for development
+// the myreads-server:8080 is the docker container name for the server
+// const API_URL = 'http://myreads-server:8080/myreads/api/v1/user';
 const VALIDATE_USER = 'validateUser';
 const CHECK_EMAIL_EXISTS = 'checkEmailExists';
 const ADD_NEW_USER = 'addNewUser';
