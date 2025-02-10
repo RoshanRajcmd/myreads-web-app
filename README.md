@@ -16,6 +16,7 @@ A Web Application to Track Your Book Reading Progress. Search and Add the books 
 * Spring Boot
   * Hibernate
   * Apache Jakarta Tomcat Server
+* NGINX
 
 ## 🎛️ Features
 
