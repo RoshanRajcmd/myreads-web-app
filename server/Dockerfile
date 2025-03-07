@@ -9,14 +9,14 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 
 # Install Maven and its dependencies
-RUN ./mvnw dependency:go-offline
+RUN /myreads-server-app/mvnw dependency:go-offline
 
 # Copy the rest of the source code
-COPY src ./src
+COPY src /myreads-server-app/src
 
 # Expose port 8080 (default for Spring Boot) and 5005 for remote debugging
 EXPOSE 8080 5005
 
 # Run the application
-CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
+CMD ["/myreads-server-app/mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
 
